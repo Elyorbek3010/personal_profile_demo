@@ -22,6 +22,7 @@ Univer SuperApp — Universitet talabalari uchun dars jadvallarini Excel fayllar
 ### 1. Frontend Serverini Ishga Tushirish:
 ```bash
 git checkout feature/frontend
+cd frontend
 npm install
 npm run dev
 ```
@@ -43,6 +44,11 @@ python manage.py runserver
 ```
 Backend API Server: `http://localhost:8000/api/`
 
+### 3. Docker Compose orqali barchasini birga ishga tushirish:
+```bash
+docker compose up --build
+```
+
 ---
 
 ## 📁 Loyiha Strukturasi (Project Structure)
@@ -52,22 +58,19 @@ personal_profile_demo/
 ├── backend/                        # Django REST Framework Backend
 │   ├── api/                        # Auth & API App (JWT, Register, Profile, Health)
 │   ├── config/                     # Django Project Config (settings, urls)
+│   ├── Dockerfile                  # Backend Dockerfile
 │   ├── manage.py                   # Django CLI
 │   └── requirements.txt            # Python dependencies
-├── src/                            # React Frontend
-│   ├── components/
-│   │   ├── AuthPage.jsx            # Email & Parol login/register sahifasi
-│   │   ├── Navbar.jsx              # Yuqori menyu va Logout tugmasi
-│   │   ├── Sidebar.jsx             # Chap tomondagi asosiy navigatsiya
-│   │   └── MobileBottomNav.jsx     # Mobil telefonlar uchun pastki menyu
-│   ├── pages/
-│   │   └── Timetable.jsx           # Smart Dars Jadvali & Excel AI Parser
-│   ├── data/
-│   │   └── mockSchedule.js         # Test dars jadvali ma'lumotlari
-│   ├── utils/
-│   │   └── excelParser.js          # Excel (.xlsx) fayllarni o'quvchi algoritm
-│   ├── App.jsx                     # Asosiy ilova komponenti
-│   └── index.css                   # Tailwind CSS v4 va maxsus stillar
+├── frontend/                       # React 19 + Vite Frontend
+│   ├── src/                        # React komonentlar va sahifalar
+│   │   ├── components/             # UI Komponentlar (AuthPage, Navbar, Sidebar, etc.)
+│   │   ├── pages/                  # Sahifalar (Timetable, etc.)
+│   │   ├── utils/                  # Utility alogritmlar (excelParser)
+│   │   └── App.jsx                 # Asosiy ilova komponenti
+│   ├── index.html                  # HTML template
+│   ├── Dockerfile                  # Frontend Dockerfile
+│   └── package.json                # NPM dependency manifest
+├── docker-compose.yml              # Frontend & Backend Docker orchestrator
 ```
 
 ---
