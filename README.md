@@ -1,4 +1,4 @@
-# 🎓 UNIVER SuperApp - Talabalar uchun Yagona Platforma (Frontend MVP)
+# 🎓 UNIVER SuperApp - Talabalar uchun Yagona Platforma
 
 Univer SuperApp — Universitet talabalari uchun dars jadvallarini Excel fayllaridan avtomatik o'qib beruvchi, baholar va davomat ko'rsatkichlarini monitoring qiluvchi hamda KD video darsliklariga tezkor ulanuvchi yagona platforma.
 
@@ -7,37 +7,41 @@ Univer SuperApp — Universitet talabalari uchun dars jadvallarini Excel fayllar
 ## 🚀 Texnologiyalar Steki (Tech Stack)
 
 - **Frontend Framework**: React 19 + Vite 8
+- **Backend Framework**: Django 5 + Django REST Framework (SimpleJWT & CORS)
 - **Styling**: Tailwind CSS v4 (Glassmorphism design system & Dark Mode)
 - **Icons**: Lucide React
 - **Excel Parser**: SheetJS (`xlsx`)
 - **Analytics & Graphs**: Recharts
-- **Auth Standarti**: Email & Password (Django REST Framework JWT token state)
+- **Auth Standarti**: Email & Password (JWT authentication)
 - **Mobile Support**: PWA Ready & Mobile Responsive Bottom Navigation Bar
 
 ---
 
-## 🛠️ Sherigingiz (Colleague) uchun Ishga Tushirish Yo'riqnomasi
+## 🛠️ Ishga Tushirish Yo'riqnomasi (Setup Guide)
 
-Loyihani kompyuteringizga ko'chirib olib, 1 minutda ishga tushirish uchun quyidagi 3 ta buyruqni bajaring:
-
-### 1. Omborni ko'chirib olish (Clone):
+### 1. Frontend Serverini Ishga Tushirish:
 ```bash
-git clone https://github.com/Elyorbek3010/personal_profile_demo.git
-cd personal_profile_demo
 git checkout feature/frontend
-```
-
-### 2. Kutubxonalarni o'rnatish (Install Dependencies):
-```bash
 npm install
-```
-
-### 3. Serverni ishga tushirish (Run Dev Server):
-```bash
 npm run dev
 ```
+Brauzerda `http://localhost:5173` manzilida ochiladi.
 
-Brauzerda `http://localhost:5173` (yoki ko'rsatilgan port) manzilini oching!
+### 2. Backend Serverini Ishga Tushirish:
+```bash
+git checkout feature/backend
+cd backend
+python -m venv venv
+# Windows:
+.\venv\Scripts\activate
+# Linux/Mac:
+# source venv/bin/activate
+
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
+```
+Backend API Server: `http://localhost:8000/api/`
 
 ---
 
@@ -45,20 +49,25 @@ Brauzerda `http://localhost:5173` (yoki ko'rsatilgan port) manzilini oching!
 
 ```
 personal_profile_demo/
-├── src/
+├── backend/                        # Django REST Framework Backend
+│   ├── api/                        # Auth & API App (JWT, Register, Profile, Health)
+│   ├── config/                     # Django Project Config (settings, urls)
+│   ├── manage.py                   # Django CLI
+│   └── requirements.txt            # Python dependencies
+├── src/                            # React Frontend
 │   ├── components/
-│   │   ├── AuthPage.jsx           # Email & Parol login/register sahifasi
-│   │   ├── Navbar.jsx             # Yuqori menyu va Logout tugmasi
-│   │   ├── Sidebar.jsx            # Chap tomondagi asosiy navigatsiya
-│   │   └── MobileBottomNav.jsx    # Mobil telefonlar uchun pastki menyu
+│   │   ├── AuthPage.jsx            # Email & Parol login/register sahifasi
+│   │   ├── Navbar.jsx              # Yuqori menyu va Logout tugmasi
+│   │   ├── Sidebar.jsx             # Chap tomondagi asosiy navigatsiya
+│   │   └── MobileBottomNav.jsx     # Mobil telefonlar uchun pastki menyu
 │   ├── pages/
-│   │   └── Timetable.jsx          # Smart Dars Jadvali & Excel AI Parser
+│   │   └── Timetable.jsx           # Smart Dars Jadvali & Excel AI Parser
 │   ├── data/
-│   │   └── mockSchedule.js        # Test dars jadvali ma'lumotlari
+│   │   └── mockSchedule.js         # Test dars jadvali ma'lumotlari
 │   ├── utils/
-│   │   └── excelParser.js         # Excel (.xlsx) fayllarni o'quvchi algoritm
-│   ├── App.jsx                    # Asosiy ilova komponenti
-│   └── index.css                  # Tailwind CSS v4 va maxsus stillar
+│   │   └── excelParser.js          # Excel (.xlsx) fayllarni o'quvchi algoritm
+│   ├── App.jsx                     # Asosiy ilova komponenti
+│   └── index.css                   # Tailwind CSS v4 va maxsus stillar
 ```
 
 ---
@@ -67,3 +76,5 @@ personal_profile_demo/
 
 - `main`: Asosiy barqaror tarmoq (Base Branch).
 - `feature/frontend`: Frontend bo'yicha ishlab chiqilayotgan faol tarmoq (Active Feature Branch).
+- `feature/backend`: Backend bo'yicha ishlab chiqilayotgan faol tarmoq (Active Backend Branch).
+
