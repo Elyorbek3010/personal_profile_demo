@@ -2,7 +2,8 @@
 
 > **Document Version:** 1.0.0  
 > **Status:** Active Architectural Blueprint  
-> **Target Audience:** Core Developers, Contributors, and Academic Stakeholders
+> **Target Audience:** Core Developers, Contributors, and Academic Stakeholders  
+> **Uzbek Translation / O'zbekcha Nusxasi:** [PROJECT_SPECIFICATION_UZ.md](file:///d:/personal_profile/PROJECT_SPECIFICATION_UZ.md)
 
 ---
 
