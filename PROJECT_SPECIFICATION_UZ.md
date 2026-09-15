@@ -1,6 +1,6 @@
 # 🏛️ UNIVER SuperApp - Tizim Arxitekturasi va Loyiha Texnik Topshirig'i (Spetsifikatsiyasi)
 
-> **Hujjat Versiyasi:** 1.0.0  
+> **Hujjat Versiyasi:** 1.1.0 (JDU / TOU real jarayonlari asosida yangilandi)  
 > **Holati:** Faol Arxitektura Loyihasi  
 > **Mo'ljallangan Auditoriya:** Asosiy Dasturchilar, Loyiha Ishtirokchilari va Universitet Mutasaddilari  
 > **Inglizcha Asl Nusxa:** [PROJECT_SPECIFICATION.md](file:///d:/personal_profile/PROJECT_SPECIFICATION.md)
@@ -9,34 +9,40 @@
 
 ## 1. 📌 Umumiy Xulosa va Muammoning Qo'yilishi
 
-### Universitetdagi Haqiqiy Muammo
-Hozirgi vaqtda universitetimizda o'quv jarayonlari va talabalar bilan aloqa juda tarqoq holatda olib borilmoqda:
-1. **Tarqoq Xabarlar va Guruhlar:** Mas'ul xodimlar va dekanat muhim e'lonlar, o'zgarishlar va dars jadvallarini tuzilmagan **Gmail chat guruhlari** va emaillar orqali tarqatishadi.
-2. **Tartibsiz Havolalar (Links):** Har bir mas'ul xodim turli platformalar, shakllar va portallarga o'z havolalarini alohida yuboradi. Natijada talabalar kerakli manbalarni topish uchun email va chatlarni titkilashga majbur bo'lishmoqda.
-3. **Noqulay Dars Jadvali Formati:** Dars jadvallari kataklari birlashtirilgan (merged cells), ko'p sahifali murakkab **Excel fayllar (`.xlsx` / `.xls`)** ko'rinishida yuboriladi. Bu talabalarga telefon yoki noutbukda o'z darslarini tezda ko'rish uchun jiddiy noqulaylik tug'diradi.
-4. **Yopiq Ma'lumotlar:** Talabalar hisob ma'lumotlari, baholar va jadvallar faqat mas'ul xodimlarda saqlanadi va talabalar uchun to'g'ridan-to'g'ri integratsiya qilingan ochiq API mavjud emas.
+### Universitetdagi Haqiqiy Vaziyat (JDU va Tokyo Online University Hamkorligi)
+Universitetimizda (Japan Digital University / Tokyo Online University) o'quv jarayonlari va talabalar bilan aloqa bir nechta Google Workspace xizmatlari orqali olib boriladi:
+1. **Google Chat (Spaces) dagi Tarqoqlik:**
+   - Mas'ul xodimlar va dekanat xabarlarni alohida-alohida Google Chat xonalarida tarqatishadi:
+     - `学生センター学生用（Talabalar...）` (Markaziy Talabalar Markazi Xonasi)
+     - `23Eグループ（4期生）` (Muayyan guruh xonasi)
+     - `日本語教育部学生用` (Yapon Tili Ta'limi Bo'limi)
+     - `東京通信大学 4期生` (TOU Akademik Xonasi)
+     - `コーパスD` (D Korpus Xonasi)
+2. **Tartibsiz Havolalar va Tizimlar:** Turli mas'ul xodimlar Google Chat xonalarida turli shakllar, saytlar va portallarga havolalar yuborishadi. Talabalar kerakli manbani topish uchun xabarlar tarixini varaqlab chiqishga majbur bo'lishmoqda.
+3. **Jonli Google Sheets Dars Jadvali (`時間割/ Dars jadvali`):**
+   - Mas'ul xodim (masalan, Masato Sonobe) jadvalni yuklab olinadigan static Excel fayl emas, balki **jonli Google Sheet (`時間割/ Dars jadvali (2026/09～)`)** havolasi orqali ulashadi.
+   - Xodimlar jadvalni vaqt o'tishi bilan to'ldirib borishadi (*"bosqichma-bosqich kiritib boriladi"*).
+   - **Talabalar Uchun Noqulaylik:** Google Sheet juda keng jadval bo'lib, pastida bir nechta sahifalar (`2026年9月`, `WLU`, `JAPANESE`, `IT`, `PARTNER`, `Employability/Co-work`), 10 dan ortiq xonalar ustunlari (`203`, `204`, `206`, `207`, `208`, `302`, `303`, `304`, `305`, `306`) hamda 6 ta dars juftligi (`Para 1-6`) mavjud. Telefon orqali ochganda talaba o'z darsini topish uchun ekranni tinimsiz yaqinlashtirishi, o'ngga-chapga surishi talab etiladi.
+4. **Universitet Email Tizimi:** Universitet barcha talabalarga rasmiy korporativ email hisoblarini taqdim etgan.
 
 ### UNIVER SuperApp Berayotgan Yechim
-**UNIVER SuperApp** — bu barcha tarqoqlikni bartaraf etuvchi, veb va mobil qurilmalarga moslashgan **Yagona Universitet Akademik Xabi (Platformasi)** hisoblanadi. U o'z ichiga quyidagilarni jamlaydi:
-- **Markazlashtirilgan Havolalar va Portallar Katalogi:** Barcha rasmiy universitet tizimlari, xodimlar havolalari va dekanat portallari bitta qulay sahifada.
-- **Mas'ul Xodimlar Boshqaruvidagi Aqlli Dars Jadvali:** Xodimlar tomonidan bir marta yuklangan master Excel jadvali tizim tomonidan tahlil qilinadi va har bir talabaga faqat uning guruhiga mos ravishda avtomatik ko'rsatiladi.
-- **Shaxsiylashtirilgan Talaba Paneli:** Har bir kun uchun darslar kartochkalari, davomat ko'rsatkichlari va rasmiy yangiliklar.
-- **Kelgusi Akademik Bo'limlar:** Baholar monitoringi, davomat bo'yicha 85% ogohlantirish burchaklari va darslik materiallari kutubxonasi.
+**UNIVER SuperApp** — bu tarqoqlikni to'liq bartaraf etuvchi, veb va mobil qurilmalarga moslashgan **Yagona Talaba Xabi** hisoblanadi. U quyidagilarni taqdim etadi:
+- **Jonli Google Sheets Jadvali Sinxronizatsiyasi:** Xodimlarning Google Drive dagi jadvalini to'g'ridan-to'g'ri o'qiydi (xodimlar hech qanday yangi tizimga fayl yuklashi shart emas).
+- **Guruh Bo'yicha Filtrlangan Mobil Jadval:** Tizimga kirgan talabaning guruhi (`23E` / `IT`) bo'yicha darslarni ajratib olib, qulay mobil kunlik kartochkalarda taqdim etadi.
+- **Google Chat Xonalari va Havolalar Katalogi:** Barcha rasmiy xonalar (`学生センター`, `23Eグループ`, `日本語教育部`, `コーパスD`), HEMIS va KD video tizimlariga 1-bosishda ulanish.
+- **Talaba Profili:** Talaba ID (`23E-014`), Guruh, Kurs (`4期生`), Yo'nalish va shaxsiy ma'lumotlarni boshqarish.
 
 ---
 
 ## 2. 👥 Foydalanuvchi Rollari va Ruxsatlar Matritsasi
 
-Tizimda tartibsizlik bo'lmasligi uchun ma'lumotlarni **boshqaruvchilar (Xodimlar)** va **iste'molchilar (Talabalar)** rollari qat'iy ajratilgan:
-
 | Funksiya / Modul | 👨‍🏫 Universitet Xodimlari & Adminlar | 🎓 Talabalar |
 | :--- | :---: | :---: |
-| **Jadval / Excel Yuklash** | ✅ **To'liq Nazorat** (Master `.xlsx` yuklaydi va yangilaydi) | ❌ **Yuklash huquqi yo'q** (Faqat ko'rish) |
-| **Dars Jadvalini Ko'rish** | ✅ Barcha guruhlar va fakultetlarni ko'ra oladi | ✅ Avtomatik ravishda **faqat o'z guruhining** jadvalini ko'radi |
-| **Universitet & Xodim Havolalari** | ✅ Havolalarni qo'shadi, toifalarga ajratadi va yangilaydi | ✅ Barcha faol havolalarga 1-bosishda ulanish |
-| **Baholar va Davomat Ma'lumotlari** | ✅ Akademik baho va ko'rsatkichlarni kiritadi | ✅ Faqat o'zining baho va davomat statistikasini ko'radi |
-| **Rasmiy E'lonlar** | ✅ Tasdiqlangan rasmiy xabarlarni chop etadi | ✅ Yangiliklar tasmasini real vaqtda o'qiydi |
-| **Kirish Ma'lumotlari** | Xodim logini / Admin panel orqali | Talaba ID (masalan, `U2110045`) + Email |
+| **Dars Jadvalini Boshqarish** | ✅ Jonli Google Sheet (`時間割`) ni odatdagidek yuritadi | ❌ **Yuklash majburiyati yo'q** (Faqat ko'rish) |
+| **Dars Jadvalini Ko'rish** | ✅ Barcha xonalar, guruhlar va sahifalarni ko'ra oladi | ✅ Avtomatik ravishda **faqat o'z guruhining** jadvalini ko'radi |
+| **Google Chat Xonalari & Havolalar** | ✅ Havolalar va xabarlarni tegishli xonalarga joylaydi | ✅ Yagona xabdan barcha xonalarga 1-bosishda o'tadi |
+| **Kirish (Autentifikatsiya)** | Xodim korporativ hisobi orqali | **Rasmiy Universitet Emaili** + Parol |
+| **Talaba ID va Profil** | Rasmiy ro'yxatni nazorat qiladi | O'z **Talaba ID** sini (`23E-014`) Profilida kiritadi |
 
 ---
 
@@ -44,134 +50,122 @@ Tizimda tartibsizlik bo'lmasligi uchun ma'lumotlarni **boshqaruvchilar (Xodimlar
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                       1. UNIVERSITET XODIMINING HARAKATI                    │
-│  - Asosiy dars jadvalini (.xlsx) yuklaydi                                   │
-│  - Rasmiy xodimlar havolalari va e'lonlarini joylashtiradi                  │
-│  - Baho va davomat ma'lumotlarini boshqaradi                                │
+│                    1. UNIVERSITET XODIMINING ISH JARAYONI                   │
+│  - Mas'ul xodim (Masato Sonobe) Google Drive'dagi jonli Google Sheet'ni      │
+│    to'ldirib boradi: "時間割/ Dars jadvali (2026/09～)"                      │
+│  - Yangiliklar va havolalarni Google Chat xonalariga joylaydi:              │
+│    "学生センター学生用", "23Eグループ", "日本語教育部"                       │
 └──────────────────────────────────────┬──────────────────────────────────────┘
                                        │
                                        ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                 2. DJANGO REST BACKEND VA AI TAHLIL QILUVCHI                │
+│                 2. UNIVER SUPERAPP JONLI KO'PRIK VA BACKEND                 │
 │                                                                             │
-│  ┌───────────────────────┐   ┌────────────────────────┐                     │
-│  │   Excel Ingestion     │   │   AI Tahlil Dvigateli  │                     │
-│  │   (Openpyxl / Pandas) │──►│  (Strukturani Ajratish)│                     │
-│  └───────────────────────┘   └───────────┬────────────┘                     │
-│                                          │                                  │
-│                                          ▼                                  │
+│  ┌─────────────────────────┐   ┌─────────────────────────────────────────┐  │
+│  │ Google Sheets Jonli Sync│──►│ Google Sheets API / CSV Oqim Tahlilchisi│  │
+│  │ (Sheet ID & GID Tablar) │   │ O'qiydi: IT, JAPANESE, WLU, 2026年9月   │  │
+│  └─────────────────────────┘   └────────────────────┬────────────────────┘  │
+│                                                     │                       │
+│                                                     ▼                       │
 │  ┌───────────────────────────────────────────────────────────────────────┐  │
-│  │ Aloqador Ma'lumotlar Bazasi (Guruhlar, Fanlar, Xonalar, Havolalar)    │  │
+│  │ Ma'lumotlarni Ajratish: Hafta Kuni (Sesh/Chor/Pay), Paralar (1-6),    │  │
+│  │ Xonalar (203+), Dars turlari (Suhbat, Ma'ruza, Imtihon)               │  │
 │  └───────────────────────────────────────────────────────────────────────┘  │
-│                                          ▲                                  │
-│                                          │ (Adapter / Xizmat Qatlami)       │
-│                                          ▼                                  │
-│  ┌───────────────────────────────────────────────────────────────────────┐  │
-│  │ REST API Endpoints (/api/auth/, /api/schedule/, /api/links/)          │  │
+│                                                     ▲                       │
+│                                                     │                       │
+│  ┌──────────────────────────────────────────────────┴────────────────────┐  │
+│  │ REST API Endpoints (/api/auth/login/, /api/schedule/, /api/profile/)  │  │
 │  └───────────────────────────────────────────────────────────────────────┘  │
 └──────────────────────────────────────┬──────────────────────────────────────┘
                                        │
                                        ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                         3. TALABA FRONTEND TAJRIBASI                        │
-│  - Talaba o'z Student ID raqami bilan kiradi (masalan: U2110045)            │
-│  - Tizim uning guruhini taniydi (masalan: 304-guruh, Dasturiy Injiniring)    │
-│  - Talabaga taqdim etiladi:                                                 │
-│    ├── 📅 Guruhning Rasmiy Jadvali (Bugun va Hafta bo'yicha)                │
-│    ├── 🔗 Barcha Xodim va Universitet Havolalari Yagona Xabi                │
-│    └── 📢 Rasmiy Yangiliklar (Gmail qidirishga chek qo'yildi)               │
+│                        3. TALABA SHAXSIY TAJRIBASI                          │
+│                                                                             │
+│  1. Talaba rasmiy universitet emaili orqali tizimga kiradi                  │
+│  2. Profilidan ma'lumotlar olinadi: Guruh = "23E", Yo'nalish = "IT"         │
+│  3. Ilova ekranda chiqaradi:                                                │
+│     ├── 📅 Shaxsiy Kunlik Dars Jadvali (Faqat 23E guruhi / 203-xona darslari)│
+│     ├── 🚀 1-Bosishda Xonalarga O'tish (学生センター, 23Eグループ, etc.)    │
+│     └── 👤 Talaba Profili (Talaba ID: 23E-014, 4期生, Avatar, Guruh)        │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 4. 🧩 Asosiy Texnik Qarorlar va Muammolar Yechimi
+## 4. 🧩 Asosiy Texnik Qarorlar va Yechimlar
 
-### 4.1. Ma'lumotlarga Kirish Muammosi: Test (Mock / Seed) Ma'lumotlar Strategiyasi
-* **Vaziyat:** Dasturchilar hozircha universitetning ichki ma'lumotlar bazasiga to'g'ridan-to'g'ri ishlab chiqarish ulanishlariga ega emas.
-* **Yechim:** Biz **Standart Shartnomaga Asoslangan Mock / Seed Ma'lumotlar Arxitekturasini** qo'llaymiz:
-  - Real hayotga mos test skriptlari (`python manage.py seed_data`) orqali talaba profillari yaratiladi (masalan: Talaba ID: `U2110045`, Guruh: `304`).
-  - API ko'rinishlari va baza o'rtasida **Adapter (Xizmat Qatlami)** o'rnatiladi.
-  - **Kelajakda Frontendni Qayta Yozishga Hojat Qolmaydi:** Frontend har doim bitta standart endpointga murojaat qiladi (`GET /api/schedule/my-schedule/`, `GET /api/links/`). Keyinchalik universitet rasmiy tizim ulanishini (masalan, HEMIS / LDAP) taqdim etganda, faqat backenddagi adapter yangilanadi. Frontend bundan zarracha o'zgarmaydi.
+### 4.1. Dars Jadvali Ko'prigi: Jonli Google Sheets Integratsiyasi
+* **Haqiqiy Holat:** Dars jadvali yuklab olinadigan fayl emas, balki Google Drive'da yuritiladigan **jonli Google Sheet** jadvalidir.
+* **Texnik Yechim:**
+  - Talabalar yoki xodimlardan fayl yuklashni talab qilish o'rniga, UNIVER SuperApp to'g'ridan-to'g'ri ochiq ko'rish havolasiga ulanadi:
+    `https://docs.google.com/spreadsheets/d/{SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet={SHEET_NAME}`
+  - **Xodimlar uchun 0% Qo'shimcha Ish:** Xodimlar Google Drive'dagi jadvalni odatdagidek o'zgartiraveradi, UNIVER SuperApp esa o'zgarishlarni real vaqtda avtomatik aks ettiradi.
+  - **Ko'p Sahifali Jadval:** Yo'nalishlar bo'yicha ajratilgan tablar alohida tahlil qilinadi: `IT`, `JAPANESE`, `WLU`, `PARTNER`.
 
-### 4.2. Excel Jadvali Muammosi: Aqlli / AI Tahlil Dvigateli
-* **Vaziyat:** Universitet Excel jadvallari har semestr o'zgarishi, birlashgan kataklar va o'nlab guruhlarga bo'lingan murakkab matritsalardan iborat bo'lishi mumkin. Oddiy qat'iy kodlangan skriptlar birinchi o'zgarishdayoq ishdan chiqadi.
-* **Yechim:**
-  - Xodim asosiy `.xlsx` faylni tizim orqali yuklaydi.
-  - Tizim kataklarni tartibga soladi va AI tahlilchisi yordamida har bir darsni standart ob'ektlarga o'giradi:
-    `Guruh` ➔ `Hafta Kuni` ➔ `Dars Vaqti` ➔ `Fan Nomi` ➔ `O'qituvchi` ➔ `Xona` ➔ `Dars Turi`.
+### 4.2. Guruhni Jadvalga Moslashtirish Algoritmi
+* **Google Sheet Strukturasi:**
+  - **Qatorlar:** Sana, Hafta Kuni (`(火) Sesh.`, `(水) Chor.`, `(木) Pay.`), Para (1–6), Vaqt oralig'i (`9:00 ~ 10:15`...).
+  - **Ustunlar:** Xonalar/Guruhlar (`203`, `204`, `206`, `207`, `208`, `302`, `303`, `304`, `305`, `306`).
+  - **Kataklar:** Dars nomlari, suhbat darslari (`面接（日本語）`), og'zaki nutq darslari (`会話クラス 14:00~15:00`), tushuntirish yig'ilishlari (`日本語説明会`).
+* **Tahlilchi Vazifasi:** Katak koordinatalarini aniqlaydi va ularni talabaning guruhi (`23E`) hamda xonasiga moslashtirib ko'rsatadi.
 
-### 4.3. Autentifikatsiya (Kirish) Strategiyasi
-* **Tayyor Demo Hisoblar:** Ishlab chiqish va loyihani namoyish etishda 1-bosish bilan tizimga kirish imkoniyati.
-* **Mustaqil Ro'yxatdan O'tish:** Jamoa a'zolari va hamkorlarga yangi hisob va Student ID ochib test qilish imkoni.
-* **JWT Tokenlar:** Xavfsiz SimpleJWT mexanizmi orqali sessiyalarni boshqarish.
+### 4.3. Kirish va Profil Matritsasi
+* **Kirish Sahifasi (`AuthPage.jsx`):**
+  - **Rasmiy Universitet Emaili** va **Parol** orqali kirish (Django REST Framework SimpleJWT yordamida).
+* **Profil Sahifasi (`Profile.jsx`):**
+  - **`studentId`** (Talaba ID, masalan: `23E-014`), **`group`** (`23E`), **`course`** (`4`), **`direction`** (`IT`), hamda shaxsiy profil rasmi (avatar).
+  - Profil ichidagi `group` ma'lumoti dars jadvali filtrini avtomatik boshqaradi.
 
 ---
 
 ## 5. 🗺️ Bosqichma-bosqich Rivojlanish Xaritasi (Roadmap)
 
-Sifatni kafolatlash uchun har bir bosqich navbati bilan amalga oshiriladi va sinovdan o'tkaziladi:
+### 📍 1-Bosqich: Autentifikatsiya va Jonli Dars Jadvali (HOZIRGI DIQQAT MARKAZI)
+1. **Universitet Emaili Bilan Kirish:**
+   - Django SimpleJWT orqali korporativ email bilan kirish (`/api/auth/login/`).
+2. **Talaba Profilini Boyitish:**
+   - [`frontend/src/pages/Profile.jsx`](file:///d:/personal_profile/frontend/src/pages/Profile.jsx) ga `studentId` maydonini qo'shish.
+3. **Jonli Google Sheet Jadval Tahlilchisi:**
+   - `時間割/ Dars jadvali` Google Sheet jadvalidan ma'lumotlarni avtomatik o'qish.
+   - Guruh (`23E`) va xonalar bo'yicha ajratilgan chiroyli mobil dars kartochkalarini chiqarish.
 
-### 📍 1-Bosqich: Autentifikatsiya va Asosiy Jadval (HOZIRGI DIQQAT MARKAZI)
-1. **Backend Talaba Modeli:**
-   - Django `User` modelini `StudentProfile` (`student_id`, `group_name`, `faculty`) bilan kengaytirish.
-   - Boshlang'ich migratsiyalar va demo seed ma'lumotlarni yaratish.
-2. **Frontend Kirish Sahifasini Backendga Ulash:**
-   - [`frontend/src/components/AuthPage.jsx`](file:///d:/personal_profile/frontend/src/components/AuthPage.jsx) ni Django SimpleJWT API ga ulash (`/api/auth/login/` va `/api/auth/register/`).
-   - Tokenlarni saqlash va tekshirish.
-3. **Xodimlar Jadvalini Qabul Qilish va Guruh Ko'rinishi:**
-   - Xodimlar uchun `POST /api/schedule/upload/` endpointini qurish.
-   - Talabaga o'z guruhining jadvalini beruvchi `GET /api/schedule/my/` ni yo'lga qo'yish.
+### 📍 2-Bosqich: Google Chat Xonalari va Havolalar Markazi
+1. **Google Chat Spaces Vidjeti:**
+   - Rasmiy xonalarga 1-bosishda o'tish imkoni:
+     - `学生センター学生用`
+     - `23Eグループ`
+     - `日本語教育部学生用`
+     - `東京通信大学`
+     - `コーパスD`
+2. **Tashqi Tizimlar Havolalari:**
+   - HEMIS va KD video platformalariga tezkor o'tish tugmalari.
 
-### 📍 2-Bosqich: Markazlashtirilgan Universitet va Xodim Havolalari Xabi
-1. **Havolalar Ma'lumot Modeli:**
-   - Toifalar: Dekanat, LMS / Moodle, Kutubxona, Kafedra Telegram Kanallari, Mas'ul Xodimlar Kontaktlari.
-2. **Interaktiv Havolalar Komponenti:**
-   - Qidiruv tizimiga ega, 1-bosishda barcha kerakli sayt va manbalarni ochib beruvchi qulay interfeys.
+### 📍 3-Bosqich: Baholar va Davomat (Keyingi Bosqich)
+- Rasmiy baholar va davomat bo'yicha 85% ogohlantirish indikatorlari.
 
-### 📍 3-Bosqich: Baholar va Davomat Tahlili (Keyingi Bosqich)
-1. **Xodimlar Tomonidan Baholarni Kiritish:**
-   - Semestr natijalarini kiritish bo'limi.
-2. **Talaba Statistikasi:**
-   - GPA hisoblagichi va 85% dan past davomat bo'yicha ogohlantirish indikatorlari.
-
-### 📍 4-Bosqich: KD Video Darslar va Resurslar (Kelajakda)
-- Onlayn video darsliklar va slayd/resurslarni yuklab olish imkoniyati.
+### 📍 4-Bosqich: Video Darsliklar va Resurslar (Kelajakda)
+- Onlayn video darslar va dars slaydlarini yuklab olish bo'limi.
 
 ---
 
-## 6. 🛠️ Texnologiyalar Steki va Loyiha Strukturasi
+## 6. 🛠️ Loyiha Strukturasi
 
 ```
 personal_profile_demo/
 ├── backend/                        # Django 5 + Django REST Framework
-│   ├── api/                        # Asosiy API ilovasi
-│   │   ├── models.py               # StudentProfile, Group, Schedule, Links
-│   │   ├── serializers.py          # Ma'lumotlarni tekshirish va JSON qilish
-│   │   ├── views.py                # REST kontrollerlari
-│   │   └── urls.py                 # API marshrutlari
-│   ├── config/                     # Django loyiha sozlamalari
-│   ├── requirements.txt            # Python kutubxonalari
-│   └── Dockerfile                  # Python 3.12 konteyneri
+│   ├── api/                        # Asosiy API ilovasi (JWT, Google Sheets Ingestion, Modellar)
+│   ├── config/                     # Django sozlamalari
+│   └── requirements.txt            # Python kutubxonalari
 ├── frontend/                       # React 19 + Vite 8
 │   ├── src/
-│   │   ├── components/             # Qayta ishlatiluvchi UI (AuthPage, Navbar, Sidebar)
-│   │   ├── pages/                  # Sahifalar (Timetable, Links Hub)
-│   │   └── App.jsx                 # Asosiy ilova komponenti
-│   ├── package.json                # Node kutubxonalari
-│   └── Dockerfile                  # Node 20 konteyneri
+│   │   ├── components/             # AuthPage, Navbar, Sidebar, MobileBottomNav
+│   │   ├── pages/                  # Timetable, Profile
+│   │   └── utils/                  # Google Sheet Parser & formatters
+│   └── package.json                # React kutubxonalari
 ├── docker-compose.yml              # Konteynerlarni birga ishga tushiruvchi sozlama
 ├── README.md                       # Qisqa yo'riqnoma
-├── CHANGELOG.md                    # Amalga oshirilgan ishlar tarixi
-├── PROJECT_SPECIFICATION.md        # Asosiy texnik spetsifikatsiya (Inglizcha)
-└── PROJECT_SPECIFICATION_UZ.md     # Ushbu hujjat (O'zbek tilida)
+├── CHANGELOG.md                    # O'zgarishlar jurnali
+├── PROJECT_SPECIFICATION.md        # Inglizcha Spetsifikatsiya
+└── PROJECT_SPECIFICATION_UZ.md     # O'zbekcha Spetsifikatsiya (Ushbu hujjat)
 ```
-
----
-
-## 7. 🚀 Sinov va Tekshirish Qoidalari
-
-Har bir yangi funksiya quyidagi sinovlardan o'tishi shart:
-1. **Integratsiya Sinovi:** Django testlari orqali har bir API to'g'ri javob berayotgani (`200 OK`).
-2. **Frontend-Backend Bog'lanishi:** React interfeysidagi harakatlar Django bazasiga to'g'ri yozilishi va o'qilishi.
-3. **Docker Mosligi:** Tizim `docker compose up` buyrug'i orqali xatolarsiz ishga tushishi.
