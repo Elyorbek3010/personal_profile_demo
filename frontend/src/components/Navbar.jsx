@@ -1,20 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { 
   GraduationCap, 
-  Search, 
   Bell, 
-  User, 
-  Sparkles, 
+  LogOut,
   Menu,
   X,
-  LogOut
+  User
 } from 'lucide-react';
 
 export default function Navbar({ activeTab, setActiveTab, isAuthenticated, user, onLogout, onToggleMobileMenu, mobileMenuOpen }) {
-  const [searchQuery, setSearchQuery] = useState('');
-
   return (
-    <header className="sticky top-0 z-40 w-full glass-panel border-b border-slate-800/80 px-4 lg:px-8 py-3.5 flex items-center justify-between">
+    <header className="sticky top-0 z-40 w-full glass-panel border-b border-slate-800/80 px-4 lg:px-8 py-3 flex items-center justify-between">
       {/* Left: Mobile Menu & Logo */}
       <div className="flex items-center gap-4">
         <button 
@@ -37,63 +33,48 @@ export default function Navbar({ activeTab, setActiveTab, isAuthenticated, user,
               <span className="font-bold text-lg text-white tracking-tight">UNIVER</span>
               <span className="text-xs px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-semibold border border-indigo-500/30">SuperApp</span>
             </div>
-            <p className="text-[11px] text-slate-400 font-medium hidden sm:block">Barcha Talabalik Platformalari Bitta Joyda</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Middle: AI Search bar */}
-      <div className="hidden md:flex items-center flex-1 max-w-md mx-8 relative">
-        <div className="relative w-full">
-          <Search size={17} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input 
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Dars jadvali, xona 304, prof. Alisher yoki KD darsini qidiring..."
-            className="w-full bg-slate-900/90 text-slate-200 text-xs sm:text-sm pl-10 pr-10 py-2.5 rounded-xl border border-slate-700/60 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition placeholder:text-slate-500"
-          />
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 bg-slate-800/80 px-1.5 py-0.5 rounded text-[10px] text-slate-400 border border-slate-700">
-            <Sparkles size={10} className="text-amber-400" />
-            <span>AI</span>
+            <p className="text-[11px] text-slate-400 font-medium hidden sm:block">Japan Digital University</p>
           </div>
         </div>
       </div>
 
       {/* Right: Notifications, User profile & Logout */}
       <div className="flex items-center gap-2 sm:gap-3">
-        <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span>DRF JWT Active</span>
-        </div>
-
         <button 
           className="relative p-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 transition hidden sm:block"
           title="Bildirishnomalar"
         >
-          <Bell size={20} />
+          <Bell size={19} />
           <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-indigo-500 ring-2 ring-slate-900"></span>
         </button>
 
         {isAuthenticated && (
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-2 bg-slate-800/60 pl-2 pr-3 py-1 rounded-xl border border-slate-700/60">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center font-bold text-white text-xs">
-                {user.email ? user.email.substring(0, 2).toUpperCase() : 'US'}
+            {/* User Profile Button */}
+            <button
+              onClick={() => setActiveTab('profile')}
+              title="Profilga o'tish"
+              className={`flex items-center gap-2 px-2.5 py-1.5 rounded-xl border transition cursor-pointer ${
+                activeTab === 'profile'
+                  ? 'bg-indigo-600/20 border-indigo-500/50 text-white'
+                  : 'bg-slate-800/60 hover:bg-slate-800 border-slate-700/60 text-slate-200'
+              }`}
+            >
+              <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center font-bold text-white text-xs">
+                {user.email ? user.email.substring(0, 2).toUpperCase() : 'EA'}
               </div>
-              <div className="text-left hidden sm:block">
-                <p className="text-xs font-semibold text-slate-200 leading-tight truncate max-w-[110px]">{user.email.split('@')[0]}</p>
-                <p className="text-[10px] text-indigo-300">KI-21-04 Guruh</p>
-              </div>
-            </div>
+              <span className="text-xs font-semibold hidden sm:inline truncate max-w-[120px]">
+                {user.name || 'Elyorbek Adhamov'}
+              </span>
+            </button>
 
             {/* Direct Logout Button */}
             <button
               onClick={onLogout}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 transition text-xs font-semibold"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 transition text-xs font-semibold cursor-pointer"
               title="Tizimdan Chiqish (Logout)"
             >
-              <LogOut size={15} />
+              <LogOut size={14} />
               <span className="hidden sm:inline">Chiqish</span>
             </button>
           </div>

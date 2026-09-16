@@ -31,7 +31,10 @@ __pycache__/
 *$py.class
 backend/venv/
 backend/db.sqlite3
-backend/.env
 backend/static/
 .env
+.env*
+*.env
+backend/.env*
+frontend/.env*
 

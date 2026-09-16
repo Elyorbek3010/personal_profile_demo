@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   CalendarDays, 
   TrendingUp, 
@@ -7,16 +7,76 @@ import {
   Smartphone,
   ExternalLink,
   BookOpen,
-  LogOut
+  LogOut,
+  ChevronRight,
+  Settings
 } from 'lucide-react';
 
+const PROFILE_STORAGE_KEY = 'student_profile';
+const AVATAR_STORAGE_KEY = 'student_avatar';
+
 export default function Sidebar({ activeTab, setActiveTab, onLogout, mobileMenuOpen, onCloseMobileMenu }) {
+  const [profileData, setProfileData] = useState(null);
+  const [avatarUrl, setAvatarUrl] = useState(null);
+
+  // localStorage dan profil va avatarni yuklash
+  useEffect(() => {
+    const loadProfileData = () => {
+      try {
+        const saved = localStorage.getItem(PROFILE_STORAGE_KEY);
+        if (saved) setProfileData(JSON.parse(saved));
+      } catch (e) { /* ignore */ }
+      try {
+        setAvatarUrl(localStorage.getItem(AVATAR_STORAGE_KEY) || null);
+      } catch (e) { /* ignore */ }
+    };
+
+    loadProfileData();
+
+    // Profil yangilanganda sidebar kartani ham yangilash
+    const handleStorageChange = (e) => {
+      if (e.key === PROFILE_STORAGE_KEY || e.key === AVATAR_STORAGE_KEY) {
+        loadProfileData();
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+
+    // Custom event orqali bir xil tab ichida ham yangilash
+    const handleProfileUpdate = () => loadProfileData();
+    window.addEventListener('profile-updated', handleProfileUpdate);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('profile-updated', handleProfileUpdate);
+    };
+  }, []);
+
+  // Profil sahifasiga o'tganda ham ma'lumotlarni yangilash
+  useEffect(() => {
+    if (activeTab === 'timetable' || activeTab === 'grades' || activeTab === 'kd_courses') {
+      // Profil sahifasidan qaytganda yangilangan ma'lumotlarni olish
+      try {
+        const saved = localStorage.getItem(PROFILE_STORAGE_KEY);
+        if (saved) setProfileData(JSON.parse(saved));
+        setAvatarUrl(localStorage.getItem(AVATAR_STORAGE_KEY) || null);
+      } catch (e) { /* ignore */ }
+    }
+  }, [activeTab]);
+
+  const displayName = profileData?.firstName && profileData?.lastName
+    ? `${profileData.firstName} ${profileData.lastName}`
+    : null;
+
+  const initials = profileData?.firstName && profileData?.lastName
+    ? `${profileData.firstName[0]}${profileData.lastName[0]}`.toUpperCase()
+    : null;
+
   const menuItems = [
     {
       id: 'timetable',
-      label: 'Dars Jadvali (Excel AI)',
+      label: 'Dars Jadvali',
       icon: CalendarDays,
-      badge: 'Smart Parser'
+      badge: 'Jonli'
     },
     {
       id: 'grades',
@@ -32,9 +92,9 @@ export default function Sidebar({ activeTab, setActiveTab, onLogout, mobileMenuO
     },
     {
       id: 'profile',
-      label: 'Talaba Profili & Auth',
+      label: 'Talaba Profili',
       icon: User,
-      badge: 'DRF JWT'
+      badge: 'Kabinet'
     }
   ];
 
@@ -57,8 +117,60 @@ export default function Sidebar({ activeTab, setActiveTab, onLogout, mobileMenuO
         transition-transform duration-300 ease-in-out
         ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
-        {/* Navigation list */}
+        {/* Top Section */}
         <div className="space-y-5">
+
+          {/* Mini Profile Card */}
+          <button
+            onClick={() => {
+              setActiveTab('profile');
+              if (onCloseMobileMenu) onCloseMobileMenu();
+            }}
+            className={`
+              w-full flex items-center gap-3 p-3 rounded-2xl transition-all group cursor-pointer
+              ${activeTab === 'profile'
+                ? 'bg-gradient-to-r from-indigo-600/20 to-purple-600/20 border border-indigo-500/40 shadow-lg shadow-indigo-600/10'
+                : 'hover:bg-slate-800/60 border border-transparent hover:border-slate-700/50'}
+            `}
+          >
+            {/* Avatar */}
+            <div className={`
+              w-11 h-11 rounded-xl overflow-hidden shrink-0 shadow-md
+              ${activeTab === 'profile' ? 'ring-2 ring-indigo-500/50' : 'ring-1 ring-slate-700/50'}
+            `}>
+              {avatarUrl ? (
+                <img src={avatarUrl} alt="Profil" className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-indigo-600 to-purple-600">
+                  <span className="text-sm font-bold text-white">
+                    {initials || '?'}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* Name & Info */}
+            <div className="flex-1 text-left min-w-0">
+              <p className={`text-sm font-semibold truncate ${activeTab === 'profile' ? 'text-white' : 'text-slate-200 group-hover:text-white'}`}>
+                {displayName || 'Profilni sozlash'}
+              </p>
+              <p className="text-[11px] text-slate-400 truncate">
+                {profileData?.group
+                  ? `${profileData.group} • ${profileData.course ? profileData.course + '-kurs' : 'Talaba'}`
+                  : "Ma'lumot qo'shing →"}
+              </p>
+            </div>
+
+            {/* Arrow */}
+            <ChevronRight size={16} className={`shrink-0 transition-transform ${
+              activeTab === 'profile' ? 'text-indigo-400 rotate-90' : 'text-slate-600 group-hover:text-slate-400 group-hover:translate-x-0.5'
+            }`} />
+          </button>
+
+          {/* Divider */}
+          <div className="border-t border-slate-800/80" />
+
+          {/* Navigation list */}
           <div>
             <p className="text-[11px] uppercase tracking-wider text-slate-400 font-bold px-3 mb-2">
               Asosiy Menyu

@@ -131,3 +131,10 @@ SIMPLE_JWT = {
 CORS_ALLOW_ALL_ORIGINS = True  # Allowed for development MVP
 CORS_ALLOW_CREDENTIALS = True
 
+# Google OAuth & University Domain Configuration
+GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID', '')
+ALLOWED_UNIVERSITY_DOMAINS = [
+    d.strip().lower() for d in os.getenv('ALLOWED_UNIVERSITY_DOMAINS', 'jdu.uz').split(',') if d.strip()
+]
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', '')
+

@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   backend:
     build:
@@ -14,6 +12,10 @@ services:
     environment:
       - DEBUG=True
       - SECRET_KEY=django-insecure-docker-dev-key
+      - ALLOWED_UNIVERSITY_DOMAINS=jdu.uz
+      - GOOGLE_CLIENT_ID=
+    env_file:
+      - ./backend/.env
 
   frontend:
     build:

@@ -1,14 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import AuthPage from './components/AuthPage';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import MobileBottomNav from './components/MobileBottomNav';
 import Timetable from './pages/Timetable';
+import Profile from './pages/Profile';
 import { LogOut, CalendarDays, TrendingUp, Video, User, ShieldCheck } from 'lucide-react';
+
+const VALID_TABS = ['timetable', 'grades', 'kd_courses', 'profile'];
+const DEFAULT_TAB = 'timetable';
+
+/** URL hash dan tab id ni olish (#timetable -> timetable) */
+function getTabFromHash() {
+  const hash = window.location.hash.replace('#', '');
+  return VALID_TABS.includes(hash) ? hash : DEFAULT_TAB;
+}
 
 export default function App() {
   const [user, setUser] = useState(null);
-  const [activeTab, setActiveTab] = useState('timetable');
+  const [activeTab, setActiveTab] = useState(getTabFromHash);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Check saved authentication state on app load
@@ -23,11 +33,46 @@ export default function App() {
     }
   }, []);
 
+  // --- Browser History Navigation ---
+  // Ilk yuklashda hash bo'lmasa yoki noto'g'ri bo'lsa, URL ni to'g'rilab qo'yish
+  useEffect(() => {
+    const currentHash = window.location.hash.replace('#', '');
+    if (!VALID_TABS.includes(currentHash)) {
+      window.history.replaceState({ tab: DEFAULT_TAB }, '', `#${DEFAULT_TAB}`);
+    } else if (!window.history.state?.tab) {
+      // Mavjud hash to'g'ri, lekin state yo'q — replaceState bilan state qo'shish
+      window.history.replaceState({ tab: currentHash }, '', `#${currentHash}`);
+    }
+  }, []);
+
+  // popstate hodisasini tinglash (Back/Forward tugmalari)
+  useEffect(() => {
+    const handlePopState = (event) => {
+      const tab = event.state?.tab || getTabFromHash();
+      setActiveTab(tab);
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  // Tab o'zgartirganda history ga push qilish (Back/Forward uchun)
+  const navigateTab = useCallback((tabId) => {
+    if (!VALID_TABS.includes(tabId)) return;
+    const currentHash = window.location.hash.replace('#', '');
+    if (currentHash !== tabId) {
+      window.history.pushState({ tab: tabId }, '', `#${tabId}`);
+    }
+    setActiveTab(tabId);
+  }, []);
+
   const handleLogout = () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('user_info');
     setUser(null);
+    // Logout qilganda history ni tozalash
+    window.history.replaceState(null, '', window.location.pathname);
   };
 
   // Render Authentication Page if not logged in
@@ -40,7 +85,7 @@ export default function App() {
       {/* Top Navbar with Logout button */}
       <Navbar
         activeTab={activeTab}
-        setActiveTab={setActiveTab}
+        setActiveTab={navigateTab}
         isAuthenticated={!!user}
         user={user}
         onLogout={handleLogout}
@@ -53,7 +98,7 @@ export default function App() {
         {/* Sidebar Navigation with Logout button */}
         <Sidebar
           activeTab={activeTab}
-          setActiveTab={setActiveTab}
+          setActiveTab={navigateTab}
           onLogout={handleLogout}
           mobileMenuOpen={mobileMenuOpen}
           onCloseMobileMenu={() => setMobileMenuOpen(false)}
@@ -64,9 +109,10 @@ export default function App() {
           
           {/* Render Active View */}
           {activeTab === 'timetable' && <Timetable />}
+          {activeTab === 'profile' && <Profile />}
 
           {/* Fallback Placeholder for upcoming modules */}
-          {activeTab !== 'timetable' && (
+          {activeTab !== 'timetable' && activeTab !== 'profile' && (
             <div className="glass-panel p-6 sm:p-12 rounded-3xl border border-slate-800 text-center space-y-4">
               <div className="w-14 h-14 rounded-2xl gradient-bg flex items-center justify-center mx-auto text-white shadow-xl shadow-indigo-600/30">
                 <CalendarDays size={28} />
@@ -77,7 +123,7 @@ export default function App() {
                 "Dars Jadvali (Excel AI)" modulini sinab ko'rish uchun menyudan o'ting.
               </p>
               <button 
-                onClick={() => setActiveTab('timetable')}
+                onClick={() => navigateTab('timetable')}
                 className="px-5 py-2.5 rounded-xl gradient-bg text-white text-xs font-semibold shadow-lg hover:opacity-95 transition"
               >
                 Dars Jadvaliga O'tish
@@ -89,7 +135,7 @@ export default function App() {
       </div>
 
       {/* Touch-Friendly Mobile Bottom Navigation Bar */}
-      <MobileBottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
+      <MobileBottomNav activeTab={activeTab} setActiveTab={navigateTab} />
     </div>
   );
 }

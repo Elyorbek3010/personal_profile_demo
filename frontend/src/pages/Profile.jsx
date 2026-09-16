@@ -15,24 +15,27 @@ import {
   Users,
   FileText,
   Sparkles,
-  Trash2
+  Trash2,
+  ShieldCheck
 } from 'lucide-react';
 
 const STORAGE_KEY = 'student_profile';
 const AVATAR_KEY = 'student_avatar';
 
 const DEFAULT_PROFILE = {
-  firstName: '',
-  lastName: '',
+  firstName: 'Elyorbek',
+  lastName: 'Adhamov',
+  studentId: '2311194',
   age: '',
   birthDate: '',
-  university: 'JDU',
-  faculty: '',
-  direction: '',
-  course: '',
-  group: '',
+  university: 'Japan Digital University (JDU)',
+  faculty: 'IT',
+  direction: 'IT',
+  course: '3',
+  group: '23D',
+  partnerUniversity: 'Tokyo Online University (TOU)',
   phone: '',
-  email: '',
+  email: 'elyorbek@jdu.uz',
   bio: ''
 };
 
@@ -40,7 +43,13 @@ const DEFAULT_PROFILE = {
 function loadProfile() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) return { ...DEFAULT_PROFILE, ...JSON.parse(saved) };
+    if (saved) {
+      const p = JSON.parse(saved);
+      // Auto-correct any legacy test ID 2311195 to 2311194
+      if (p.studentId === '2311195') p.studentId = '2311194';
+      if (p.group === '23E') p.group = '23D';
+      return { ...DEFAULT_PROFILE, ...p };
+    }
   } catch (e) {
     console.error('Profile load error:', e);
   }
@@ -63,6 +72,15 @@ export default function Profile() {
   const [editForm, setEditForm] = useState({ ...DEFAULT_PROFILE });
   const [saveNotice, setSaveNotice] = useState(null);
   const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    const handleProfileUpdate = () => {
+      setProfile(loadProfile());
+      setAvatar(loadAvatar());
+    };
+    window.addEventListener('profile-updated', handleProfileUpdate);
+    return () => window.removeEventListener('profile-updated', handleProfileUpdate);
+  }, []);
 
   // Form tahrirlashni boshlash
   const startEditing = () => {
@@ -149,16 +167,31 @@ export default function Profile() {
   // Ma'lumot ko'rsatish maydonlari konfiguratsiyasi
   const fieldConfig = [
     { key: 'firstName', label: 'Ism', icon: User, placeholder: 'Elyorbek', type: 'text' },
-    { key: 'lastName', label: 'Familiya', icon: User, placeholder: 'Amirullayev', type: 'text' },
+    { key: 'lastName', label: 'Familiya', icon: User, placeholder: 'Adhamov', type: 'text' },
+    { key: 'studentId', label: 'Talaba ID', icon: Sparkles, placeholder: '2311194', type: 'text' },
+    { key: 'group', label: 'Guruh', icon: Users, placeholder: '23D', type: 'text' },
+    { key: 'direction', label: "Yo'nalish", icon: BookOpen, placeholder: "IT", type: 'text' },
+    { key: 'course', label: 'Kurs / Bosqich', icon: GraduationCap, placeholder: '3', type: 'select', options: ['1', '2', '3', '4', '5', '6'] },
     { key: 'birthDate', label: "Tug'ilgan sana", icon: Calendar, placeholder: '', type: 'date' },
     { key: 'age', label: 'Yosh', icon: Calendar, placeholder: 'Avtomatik hisoblanadi', type: 'number', disabled: true },
-    { key: 'university', label: 'Universitet', icon: Building2, placeholder: "Toshkent Axborot Texnologiyalari Universiteti", type: 'text' },
-    { key: 'faculty', label: 'Fakultet', icon: GraduationCap, placeholder: "Kompyuter injiniringi", type: 'text' },
-    { key: 'direction', label: "Yo'nalish", icon: BookOpen, placeholder: "Dasturiy injiniring", type: 'text' },
-    { key: 'course', label: 'Kurs', icon: GraduationCap, placeholder: '3', type: 'select', options: ['1', '2', '3', '4', '5', '6'] },
-    { key: 'group', label: 'Guruh', icon: Users, placeholder: 'KI-21-04', type: 'text' },
+    { key: 'university', label: 'Universitet', icon: Building2, placeholder: "Japan Digital University (JDU)", type: 'text' },
+    { 
+      key: 'partnerUniversity', 
+      label: 'Hamkor Universitet (Onlayn / Kampus)', 
+      icon: Building2, 
+      placeholder: 'Tokyo Online University (TOU)', 
+      type: 'select', 
+      options: [
+        'Tokyo Online University (TOU)', 
+        'SANNO University', 
+        'Niigata (Kaishi Professional University)', 
+        'Okayama University',
+        'Boshqa / Hamkorsiz'
+      ] 
+    },
+    { key: 'faculty', label: 'Fakultet', icon: GraduationCap, placeholder: "Axborot Texnologiyalari", type: 'text' },
     { key: 'phone', label: 'Telefon raqami', icon: Phone, placeholder: '+998 90 123 45 67', type: 'tel' },
-    { key: 'email', label: 'Email', icon: Mail, placeholder: 'talaba@univer.uz', type: 'email' },
+    { key: 'email', label: 'Email', icon: Mail, placeholder: 'talaba@jdu.uz', type: 'email' },
   ];
 
   return (
@@ -280,21 +313,35 @@ export default function Profile() {
               </button>
             )}
 
+            {/* Verified University Account Badge */}
+            <div className="pt-1">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-[11px] font-semibold border border-emerald-500/20">
+                <ShieldCheck size={13} />
+                <span>Tasdiqlangan Universitet Hisobi</span>
+              </div>
+            </div>
+
             {/* Quick Info Chips */}
-            <div className="flex flex-wrap justify-center gap-2 pt-2">
+            <div className="flex flex-wrap justify-center gap-2 pt-1">
+              {profile.studentId && (
+                <span className="px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-300 text-[11px] font-semibold border border-amber-500/20 flex items-center gap-1">
+                  <Sparkles size={11} />
+                  <span>{profile.studentId}</span>
+                </span>
+              )}
+              {profile.group && (
+                <span className="px-2.5 py-1 rounded-lg bg-purple-500/10 text-purple-300 text-[11px] font-semibold border border-purple-500/20">
+                  {profile.group} guruhi
+                </span>
+              )}
               {profile.course && (
                 <span className="px-2.5 py-1 rounded-lg bg-indigo-500/10 text-indigo-300 text-[11px] font-semibold border border-indigo-500/20">
                   {profile.course}-kurs
                 </span>
               )}
-              {profile.group && (
-                <span className="px-2.5 py-1 rounded-lg bg-purple-500/10 text-purple-300 text-[11px] font-semibold border border-purple-500/20">
-                  {profile.group}
-                </span>
-              )}
-              {profile.age && (
-                <span className="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-300 text-[11px] font-semibold border border-emerald-500/20">
-                  {profile.age} yosh
+              {profile.direction && (
+                <span className="px-2.5 py-1 rounded-lg bg-blue-500/10 text-blue-300 text-[11px] font-semibold border border-blue-500/20">
+                  {profile.direction}
                 </span>
               )}
             </div>

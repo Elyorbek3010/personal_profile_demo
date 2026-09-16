@@ -30,7 +30,7 @@ Universitetimizda (Japan Digital University / Tokyo Online University) o'quv jar
 - **Jonli Google Sheets Jadvali Sinxronizatsiyasi:** Xodimlarning Google Drive dagi jadvalini to'g'ridan-to'g'ri o'qiydi (xodimlar hech qanday yangi tizimga fayl yuklashi shart emas).
 - **Guruh Bo'yicha Filtrlangan Mobil Jadval:** Tizimga kirgan talabaning guruhi (`23E` / `IT`) bo'yicha darslarni ajratib olib, qulay mobil kunlik kartochkalarda taqdim etadi.
 - **Google Chat Xonalari va Havolalar Katalogi:** Barcha rasmiy xonalar (`学生センター`, `23Eグループ`, `日本語教育部`, `コーパスD`), HEMIS va KD video tizimlariga 1-bosishda ulanish.
-- **Talaba Profili:** Talaba ID (`23E-014`), Guruh, Kurs (`4期生`), Yo'nalish va shaxsiy ma'lumotlarni boshqarish.
+- **Talaba Profili:** Talaba ID (`2311195`), Guruh, Kurs (`4期生`), Yo'nalish va shaxsiy ma'lumotlarni boshqarish.
 
 ---
 
@@ -42,7 +42,7 @@ Universitetimizda (Japan Digital University / Tokyo Online University) o'quv jar
 | **Dars Jadvalini Ko'rish** | ✅ Barcha xonalar, guruhlar va sahifalarni ko'ra oladi | ✅ Avtomatik ravishda **faqat o'z guruhining** jadvalini ko'radi |
 | **Google Chat Xonalari & Havolalar** | ✅ Havolalar va xabarlarni tegishli xonalarga joylaydi | ✅ Yagona xabdan barcha xonalarga 1-bosishda o'tadi |
 | **Kirish (Autentifikatsiya)** | Xodim korporativ hisobi orqali | **Rasmiy Universitet Emaili** + Parol |
-| **Talaba ID va Profil** | Rasmiy ro'yxatni nazorat qiladi | O'z **Talaba ID** sini (`23E-014`) Profilida kiritadi |
+| **Talaba ID va Profil** | Rasmiy ro'yxatni nazorat qiladi | O'z **Talaba ID** sini (`2311195`) Profilida kiritadi |
 
 ---
 
@@ -87,7 +87,7 @@ Universitetimizda (Japan Digital University / Tokyo Online University) o'quv jar
 │  3. Ilova ekranda chiqaradi:                                                │
 │     ├── 📅 Shaxsiy Kunlik Dars Jadvali (Faqat 23E guruhi / 203-xona darslari)│
 │     ├── 🚀 1-Bosishda Xonalarga O'tish (学生センター, 23Eグループ, etc.)    │
-│     └── 👤 Talaba Profili (Talaba ID: 23E-014, 4期生, Avatar, Guruh)        │
+│     └── 👤 Talaba Profili (Talaba ID: 2311195, 4期生, Avatar, Guruh)        │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -111,21 +111,28 @@ Universitetimizda (Japan Digital University / Tokyo Online University) o'quv jar
 * **Tahlilchi Vazifasi:** Katak koordinatalarini aniqlaydi va ularni talabaning guruhi (`23E`) hamda xonasiga moslashtirib ko'rsatadi.
 
 ### 4.3. Kirish va Profil Matritsasi
-* **Kirish Sahifasi (`AuthPage.jsx`):**
-  - **Rasmiy Universitet Emaili** va **Parol** orqali kirish (Django REST Framework SimpleJWT yordamida).
+* **Kirish Sahifasi (`AuthPage.jsx` & `/api/auth/google/`):**
+  - **Rasmiy Universitet Google Hisobi (Google Workspace SSO)** orqali 1-bosishda kirish (ro'yxatdan o'tish talab qilinmaydi).
+  - Universitet domeni (faqat @jdu.uz) Google OAuth 2.0 orqali kriptografik tasdiqlanadi.
+  - Django `User` hamda `StudentProfile` avtomatik yaratiladi va DRF SimpleJWT tokenlari (`access` va `refresh`) beriladi.
+  - Tezkor sinov (demo) imkoniyati mavjud.
+  - Muqobil email/parol shakli zaxirada saqlab qolingan.
 * **Profil Sahifasi (`Profile.jsx`):**
-  - **`studentId`** (Talaba ID, masalan: `23E-014`), **`group`** (`23E`), **`course`** (`4`), **`direction`** (`IT`), hamda shaxsiy profil rasmi (avatar).
+  - **`studentId`** (Talaba ID, masalan: `2311195`), **`group`** (`23E`), **`course`** (`4期生` / `4`), **`direction`** (`IT`), hamda shaxsiy profil rasmi (avatar).
+  - "Tasdiqlangan Universitet Hisobi" nishoni chiqariladi.
   - Profil ichidagi `group` ma'lumoti dars jadvali filtrini avtomatik boshqaradi.
 
 ---
 
 ## 5. 🗺️ Bosqichma-bosqich Rivojlanish Xaritasi (Roadmap)
 
-### 📍 1-Bosqich: Autentifikatsiya va Jonli Dars Jadvali (HOZIRGI DIQQAT MARKAZI)
-1. **Universitet Emaili Bilan Kirish:**
-   - Django SimpleJWT orqali korporativ email bilan kirish (`/api/auth/login/`).
+### 📍 1-Bosqich: Autentifikatsiya va Jonli Dars Jadvali (AUTH YAKUNLANDI)
+1. **Universitet Google Hisobi Bilan Kirish:**
+   - Django SimpleJWT va Google OAuth 2.0 orqali korporativ email bilan kirish (`/api/auth/google/`).
+   - Universitet domeni (faqat `@jdu.uz`) nazorati va talaba profilini avtomatik shakllantirish.
 2. **Talaba Profilini Boyitish:**
-   - [`frontend/src/pages/Profile.jsx`](file:///d:/personal_profile/frontend/src/pages/Profile.jsx) ga `studentId` maydonini qo'shish.
+   - Django `StudentProfile` modeli yaratildi (`student_id`, `group`, `direction`, `course`, `avatar`).
+   - [`frontend/src/pages/Profile.jsx`](file:///d:/personal_profile/frontend/src/pages/Profile.jsx) ga `studentId` va tasdiqlanganlik nishonlari qo'shildi.
 3. **Jonli Google Sheet Jadval Tahlilchisi:**
    - `時間割/ Dars jadvali` Google Sheet jadvalidan ma'lumotlarni avtomatik o'qish.
    - Guruh (`23E`) va xonalar bo'yicha ajratilgan chiroyli mobil dars kartochkalarini chiqarish.

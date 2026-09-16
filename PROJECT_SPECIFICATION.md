@@ -30,7 +30,7 @@ At our university (Japan Digital University / Tokyo Online University), academic
 - **Live Google Sheets Schedule Sync:** Directly reads the official live Google Sheet without requiring staff to re-upload files or alter their workflow.
 - **Group-Filtered Mobile Timetable:** Automatically maps the logged-in student's Group (e.g., `23E` / `IT`) to their exact classes, presenting a clean, modern daily schedule card.
 - **Spaces & University Links Directory:** 1-click access to all official Google Chat Spaces, HEMIS, KD video courses, and university resources.
-- **Student Profile Management:** Tracks Student ID (e.g., `23E-014`), Group, Course (`4期生`), Direction, and personal credentials.
+- **Student Profile Management:** Tracks Student ID (e.g., `2311195`), Group, Course (`4期生`), Direction, and personal credentials.
 
 ---
 
@@ -42,7 +42,7 @@ At our university (Japan Digital University / Tokyo Online University), academic
 | **Schedule View** | ✅ Can inspect all rooms, directions & groups | ✅ Automatically sees **their group's** classes |
 | **Google Chat Spaces & Links** | ✅ Posts links in Student Center / Chat spaces | ✅ 1-click access to all spaces from one hub |
 | **Login Authentication** | Staff university account | **Official University Email** + Password |
-| **Student ID & Profile** | Manages official student roster | Enters **Student ID** (e.g. `23E-014`) in Profile |
+| **Student ID & Profile** | Manages official student roster | Enters **Student ID** (e.g. `2311195`) in Profile |
 
 ---
 
@@ -82,7 +82,7 @@ At our university (Japan Digital University / Tokyo Online University), academic
 │                       3. STUDENT PERSONALIZED EXPERIENCE                    │
 │                                                                             │
 │  1. Student logs in via Official University Email                           │
-│  2. Profile identifies: Group = "23E", Direction = "IT", ID = "23E-014"     │
+│  2. Profile identifies: Group = "23E", Direction = "IT", ID = "2311195"     │
 │  3. App renders:                                                            │
 │     ├── 📅 Personalized Daily Timetable (Filtered for Group 23E / Room 203) │
 │     ├── 🚀 1-Click Spaces Hub (Jump to 学生センター, 23Eグループ, etc.)       │
@@ -110,22 +110,28 @@ At our university (Japan Digital University / Tokyo Online University), academic
 * **The Parser Action:** Extracts cell coordinates `(Day, Para, Room)` and maps them to the student's assigned group and room.
 
 ### 4.3. Authentication vs. Profile Separation
-* **Login (`AuthPage.jsx`):**
-  - Uses **Official University Email** and **Password** (leveraging Django REST Framework JWT tokens).
-  - Matches the university policy of issuing official email accounts.
+* **Login (`AuthPage.jsx` & `/api/auth/google/`):**
+  - Uses **Official University Google Account (Google Workspace SSO)** (no registration friction).
+  - Validates university domain (@jdu.uz exclusively) cryptographically with Google OAuth 2.0.
+  - Automatically provisions Django `User` and `StudentProfile`, returning Django REST Framework SimpleJWT tokens (`access` & `refresh`).
+  - Supports quick developer demo accounts for offline and testing agility.
+  - Alternative email/password login is retained for backward compatibility.
 * **Profile (`Profile.jsx`):**
-  - Manages **`studentId`** (Talaba ID, e.g. `23E-014`), **`group`** (`23E`), **`course`** (`4`), **`direction`** (`IT`), and personal avatar.
+  - Manages **`studentId`** (Talaba ID, e.g. `2311195`), **`group`** (`23E`), **`course`** (`4期生` / `4`), **`direction`** (`IT`), and personal avatar.
+  - Displays verified university account status (`Tasdiqlangan Universitet Hisobi`).
   - The `group` field in the profile automatically drives the timetable filter.
 
 ---
 
 ## 5. 🗺️ Phased Implementation Roadmap
 
-### 📍 Phase 1: Auth & Live Timetable (CURRENT FOCUS)
+### 📍 Phase 1: Auth & Live Timetable (COMPLETED AUTH)
 1. **Login & Auth Flow:**
-   - University email authentication via DRF SimpleJWT (`/api/auth/login/`).
+   - University Google Workspace SSO via DRF SimpleJWT (`/api/auth/google/`).
+   - Domain whitelisting (strictly `@jdu.uz`) and automatic student profile initialization.
 2. **Student Profile Enhancement:**
-   - Add `studentId` field to [`frontend/src/pages/Profile.jsx`](file:///d:/personal_profile/frontend/src/pages/Profile.jsx).
+   - Added `StudentProfile` Django model with `student_id`, `group`, `course`, `direction`, and avatar.
+   - Enhanced [`frontend/src/pages/Profile.jsx`](file:///d:/personal_profile/frontend/src/pages/Profile.jsx) with `studentId` and verification badges.
 3. **Live Google Sheet Timetable Parser:**
    - Ingest live spreadsheet data (`時間割/ Dars jadvali`).
    - Render clean daily class cards filtered by Group (`23E`) and Room.
