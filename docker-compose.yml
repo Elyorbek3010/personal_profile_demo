@@ -1,0 +1,18 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: univer_mobile_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - ./data:/data
+    environment:
+      - DEBUG=True
+      - SECRET_KEY=django-insecure-univer-superapp-dev-key-2026-mobile-edition
+      - ALLOWED_HOSTS=*
+      - ALLOWED_UNIVERSITY_DOMAINS=jdu.uz
+    env_file:
+      - ./backend/.env
