@@ -65,7 +65,10 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    if (!email.toLowerCase().endsWith('@jdu.uz')) {
+    final isStudentId = RegExp(r'^\d{6,8}[a-zA-Z]?$').hasMatch(email);
+    final isJduEmail = email.toLowerCase().endsWith('@jdu.uz');
+
+    if (!isJduEmail && !isStudentId) {
       setState(() {
         _errorMessage = t('domain_error');
         _isSubmitting = false;

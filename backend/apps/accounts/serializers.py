@@ -41,16 +41,27 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         login_input = attrs.get('username', '').strip()
 
-        # 1. Enforce strictly official @jdu.uz university email
-        if not login_input.lower().endswith('@jdu.uz'):
-            raise serializers.ValidationError({
-                "detail": "Faqat rasmiy universitet emaili (@jdu.uz) orqali kirish mumkin."
-            })
-
+        # Flexible login matching:
+        # Accepts:
+        # - Full official email (e.g. '2300037o@jdu.uz')
+        # - Email without name letter (e.g. '2300037@jdu.uz')
+        # - Pure student ID (e.g. '2300037')
+        # - Username
         user_obj = User.objects.filter(email__iexact=login_input).first() or User.objects.filter(username__iexact=login_input).first()
+
+        if not user_obj:
+            clean_id = login_input.lower().replace('@jdu.uz', '').strip()
+            profile = StudentProfile.objects.filter(student_id__iexact=clean_id).first()
+            if not profile:
+                numeric_part = ''.join(c for c in clean_id if c.isdigit())
+                if numeric_part:
+                    profile = StudentProfile.objects.filter(student_id=numeric_part).first()
+            if profile:
+                user_obj = profile.user
+
         if not user_obj:
             raise serializers.ValidationError({
-                "detail": "Email yoki parol noto'g'ri kiritildi."
+                "detail": "Email yoki talaba ID raqami topilmadi. Tekshirib qaytadan urinib ko'ring."
             })
 
         attrs['username'] = user_obj.username
