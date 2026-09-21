@@ -16,6 +16,13 @@ class StudentProfile(models.Model):
         default=True, 
         help_text="Yapon tili darslaridan ozod qilinganlik holati (JAPANESE varag'i asosida)"
     )
+    japanese_level = models.CharField(
+        max_length=20,
+        blank=True,
+        null=True,
+        default="N3",
+        help_text="Yapon tili darajasi (masalan: N2, N3, N4, N5, N3D, N2A)"
+    )
     data_jdu_hash = models.CharField(
         max_length=50, blank=True, null=True, db_index=True,
         help_text="data.jdu.uz shaxsiy sahifa kodi (masalan: 2c7a6987)"

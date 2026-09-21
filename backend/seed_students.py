@@ -23,6 +23,7 @@ SEED_STUDENTS = [
         'direction': 'IT',
         'partner_university': 'Tokyo Online University (TOU)',
         'japanese_exempt': True,
+        'japanese_level': 'N2',
         'avatar_url': 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=256',
         'bio': 'IT and Software Engineering student.'
     },
@@ -36,6 +37,7 @@ SEED_STUDENTS = [
         'direction': 'IT',
         'partner_university': 'Tokyo Online University (TOU)',
         'japanese_exempt': True,
+        'japanese_level': 'N2',
         'avatar_url': 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=256',
         'bio': 'Software Engineering and Cloud Computing enthusiast.'
     },
@@ -49,6 +51,7 @@ SEED_STUDENTS = [
         'direction': 'IT',
         'partner_university': 'SANNO University',
         'japanese_exempt': False,
+        'japanese_level': 'N2',
         'avatar_url': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=256',
         'bio': 'Business & IT integration specialist.'
     },
@@ -62,6 +65,7 @@ SEED_STUDENTS = [
         'direction': 'IT',
         'partner_university': 'Tokyo Online University (TOU)',
         'japanese_exempt': True,
+        'japanese_level': 'N2',
         'avatar_url': 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=256',
         'bio': 'UI/UX Design & Frontend development.'
     },
@@ -75,6 +79,7 @@ SEED_STUDENTS = [
         'direction': 'IT',
         'partner_university': 'SANNO University',
         'japanese_exempt': False,
+        'japanese_level': 'N2',
         'avatar_url': 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=256',
         'bio': 'Data analytics & algorithms.'
     },
@@ -88,6 +93,7 @@ SEED_STUDENTS = [
         'direction': 'IT',
         'partner_university': 'Tokyo Online University (TOU)',
         'japanese_exempt': False,
+        'japanese_level': 'N3G',
         'avatar_url': 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&q=80&w=256',
         'bio': 'Backend developer & system admin.'
     },
@@ -101,6 +107,7 @@ SEED_STUDENTS = [
         'direction': 'IT',
         'partner_university': 'Okayama University',
         'japanese_exempt': True,
+        'japanese_level': 'N2',
         'avatar_url': 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=256',
         'bio': 'Japanese N2 certified & Web developer.'
     },
@@ -114,6 +121,7 @@ SEED_STUDENTS = [
         'direction': 'IT',
         'partner_university': 'SANNO University',
         'japanese_exempt': False,
+        'japanese_level': 'N3F',
         'avatar_url': 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=256',
         'bio': 'Mobile App Developer (Flutter).'
     },
@@ -127,6 +135,7 @@ SEED_STUDENTS = [
         'direction': 'IT',
         'partner_university': 'Tokyo Online University (TOU)',
         'japanese_exempt': False,
+        'japanese_level': 'N4',
         'avatar_url': 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=256',
         'bio': 'First-year IT student, competitive programming.'
     },
@@ -138,10 +147,11 @@ SEED_STUDENTS = [
         'group': '22A',
         'course': '4',
         'direction': 'IT',
-        'partner_university': 'Niigata (Kaishi Professional University)',
+        'partner_university': 'Tokyo Online University (TOU)',
         'japanese_exempt': True,
-        'avatar_url': 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=256',
-        'bio': 'Graduating senior, DevOps engineer.'
+        'japanese_level': 'N1',
+        'avatar_url': 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=256',
+        'bio': 'Senior student, Cloud & DevOps engineer.'
     }
 ]
 
@@ -174,6 +184,7 @@ def run_seed():
                 'direction': item['direction'],
                 'partner_university': item['partner_university'],
                 'japanese_exempt': item['japanese_exempt'],
+                'japanese_level': item.get('japanese_level', 'N3'),
                 'avatar_url': item['avatar_url'],
                 'bio': item['bio'],
                 'is_verified': True
@@ -186,6 +197,7 @@ def run_seed():
             profile.direction = item['direction']
             profile.partner_university = item['partner_university']
             profile.japanese_exempt = item['japanese_exempt']
+            profile.japanese_level = item.get('japanese_level', 'N3')
             profile.avatar_url = item['avatar_url']
             profile.bio = item['bio']
             profile.is_verified = True

@@ -13,6 +13,7 @@ class StudentProfileSerializer(serializers.ModelSerializer):
             'direction',
             'partner_university',
             'japanese_exempt',
+            'japanese_level',
             'avatar_url',
             'phone',
             'bio',
@@ -76,6 +77,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             'direction': profile.direction if profile else '',
             'partnerUniversity': profile.partner_university if profile else '',
             'japaneseExempt': profile.japanese_exempt if profile else False,
+            'japaneseLevel': getattr(profile, 'japanese_level', 'N3') if profile else 'N3',
             'avatar': profile.avatar_url if profile else '',
             'isVerified': profile.is_verified if profile else False,
             'role': 'student'

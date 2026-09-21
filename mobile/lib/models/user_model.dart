@@ -11,6 +11,7 @@ class UserModel {
   final String direction;
   final String partnerUniversity;
   final bool japaneseExempt;
+  final String japaneseLevel;
   final String avatar;
   final bool isVerified;
   final String role;
@@ -28,6 +29,7 @@ class UserModel {
     required this.direction,
     required this.partnerUniversity,
     required this.japaneseExempt,
+    this.japaneseLevel = 'N3',
     required this.avatar,
     required this.isVerified,
     required this.role,
@@ -47,6 +49,7 @@ class UserModel {
       direction: json['direction']?.toString() ?? '',
       partnerUniversity: json['partnerUniversity']?.toString() ?? '',
       japaneseExempt: json['japaneseExempt'] == true,
+      japaneseLevel: json['japaneseLevel']?.toString() ?? 'N3',
       avatar: json['avatar']?.toString() ?? '',
       isVerified: json['isVerified'] == true,
       role: json['role']?.toString() ?? 'student',
@@ -67,6 +70,7 @@ class UserModel {
       'direction': direction,
       'partnerUniversity': partnerUniversity,
       'japaneseExempt': japaneseExempt,
+      'japaneseLevel': japaneseLevel,
       'avatar': avatar,
       'isVerified': isVerified,
       'role': role,
@@ -86,6 +90,7 @@ class UserModel {
     String? direction,
     String? partnerUniversity,
     bool? japaneseExempt,
+    String? japaneseLevel,
     String? avatar,
     bool? isVerified,
     String? role,
@@ -103,6 +108,7 @@ class UserModel {
       direction: direction ?? this.direction,
       partnerUniversity: partnerUniversity ?? this.partnerUniversity,
       japaneseExempt: japaneseExempt ?? this.japaneseExempt,
+      japaneseLevel: japaneseLevel ?? this.japaneseLevel,
       avatar: avatar ?? this.avatar,
       isVerified: isVerified ?? this.isVerified,
       role: role ?? this.role,
