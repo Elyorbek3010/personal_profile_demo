@@ -15,6 +15,7 @@ from django.conf import settings
 logger = logging.getLogger(__name__)
 
 GEMINI_MODELS = [
+    'gemini-3.1-flash-lite',
     'gemini-flash-latest',
     'gemini-3.6-flash',
 ]
