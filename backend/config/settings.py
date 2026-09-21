@@ -171,4 +171,8 @@ ALLOWED_UNIVERSITY_DOMAINS = [
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', '')
 
 # Path to official timetable Excel file
-DATA_EXCEL_PATH = BASE_DIR.parent / 'data' / 'timetable.xlsx'
+DATA_EXCEL_PATH = (
+    Path(os.getenv('DATA_EXCEL_PATH')) if os.getenv('DATA_EXCEL_PATH')
+    else (BASE_DIR / 'data' / 'timetable.xlsx' if (BASE_DIR / 'data' / 'timetable.xlsx').exists()
+          else BASE_DIR.parent / 'data' / 'timetable.xlsx')
+)
