@@ -37,4 +37,5 @@ backend/static/
 *.env
 backend/.env*
 frontend/.env*
+*.apk
 

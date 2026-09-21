@@ -16,7 +16,8 @@ from apps.timetable.services.excel_reader import (
 )
 from apps.timetable.services.ai_parser import (
     parse_with_gemini,
-    parse_with_heuristics
+    parse_with_heuristics,
+    parse_timetable_item
 )
 
 logger = logging.getLogger(__name__)
@@ -92,8 +93,8 @@ class Command(BaseCommand):
             except Exception:
                 end_time = datetime.time(10, 15)
 
-            # Parse class items from the raw cell text
-            parsed_classes = parse_with_heuristics(raw_text, group_code=group)
+            # Parse class items from the raw cell text with Gemini AI or intelligent heuristics
+            parsed_classes = parse_timetable_item(raw_text, group_code=group, api_key=api_key)
 
             for cls in parsed_classes:
                 subject = cls['subject']
