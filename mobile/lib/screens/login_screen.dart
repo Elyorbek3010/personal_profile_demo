@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import '../services/locale_service.dart';
+import '../services/theme_service.dart';
 import '../widgets/app_top_bar.dart';
 import 'main_shell.dart';
 
@@ -110,12 +111,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final t = LocaleService().t;
-    final isLoading = _isSubmitting || AuthService().isLoading;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return ListenableBuilder(
+      listenable: Listenable.merge([LocaleService(), ThemeService(), AuthService()]),
+      builder: (context, _) {
+        final t = LocaleService().t;
+        final isLoading = _isSubmitting || AuthService().isLoading;
+        final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Scaffold(
-      body: SafeArea(
+        return Scaffold(
+          body: SafeArea(
         child: Column(
           children: [
             // Top Action Bar: Theme & Language
@@ -404,5 +408,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
-  }
+  },
+);
+}
 }
