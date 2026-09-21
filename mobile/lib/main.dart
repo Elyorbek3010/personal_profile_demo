@@ -34,7 +34,7 @@ class UniverSuperApp extends StatelessWidget {
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           themeMode: ThemeService().themeMode,
-          home: isAuthenticated ? const MainShell() : const LoginScreen(),
+          home: isAuthenticated ? MainShell(key: ValueKey(AuthService().currentUser?.id)) : const LoginScreen(),
         );
       },
     );
