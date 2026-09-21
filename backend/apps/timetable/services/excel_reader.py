@@ -40,13 +40,20 @@ def load_workbook_source():
             logger.error(f"Failed to fetch live Google Sheet, falling back to local file: {e}")
 
     # Local fallback / DEV mode
-    local_path = getattr(settings, 'DATA_EXCEL_PATH', Path(settings.BASE_DIR).parent / 'data' / 'timetable.xlsx')
-    if not os.path.exists(local_path):
-        # Alternative path check
-        local_path = Path(settings.BASE_DIR) / '..' / 'data' / 'timetable.xlsx'
+    local_path = getattr(settings, 'DATA_EXCEL_PATH', None)
+    if not local_path or not os.path.exists(local_path):
+        candidates = [
+            Path(settings.BASE_DIR) / 'data' / 'timetable.xlsx',
+            Path(settings.BASE_DIR).parent / 'data' / 'timetable.xlsx',
+            Path(settings.BASE_DIR) / '..' / 'data' / 'timetable.xlsx',
+        ]
+        for candidate in candidates:
+            if os.path.exists(candidate):
+                local_path = candidate
+                break
 
-    if not os.path.exists(local_path):
-        raise FileNotFoundError(f"Timetable workbook not found at: {local_path}")
+    if not local_path or not os.path.exists(local_path):
+        raise FileNotFoundError(f"Timetable workbook not found in any candidate path.")
 
     logger.info(f"Loading local timetable workbook from: {local_path}")
     return openpyxl.load_workbook(local_path, data_only=True)
