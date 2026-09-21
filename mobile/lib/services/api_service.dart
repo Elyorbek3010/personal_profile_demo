@@ -18,11 +18,17 @@ class ApiService {
   }
 
   Future<http.Response> _getWithAuth(Uri url) async {
-    var response = await http.get(url, headers: _getHeaders());
+    var response = await http.get(url, headers: _getHeaders()).timeout(
+      const Duration(seconds: 15),
+      onTimeout: () => throw Exception("Serverga ulanish vaqti tugadi. Qaytadan urinib ko'ring."),
+    );
     if (response.statusCode == 401) {
       final refreshed = await AuthService().refreshToken();
       if (refreshed) {
-        response = await http.get(url, headers: _getHeaders());
+        response = await http.get(url, headers: _getHeaders()).timeout(
+          const Duration(seconds: 15),
+          onTimeout: () => throw Exception("Serverga ulanish vaqti tugadi. Qaytadan urinib ko'ring."),
+        );
       } else {
         await AuthService().logout();
         throw Exception("Sessiya muddati tugagan. Qaytadan kiring.");
@@ -32,11 +38,17 @@ class ApiService {
   }
 
   Future<http.Response> _postWithAuth(Uri url, {Object? body}) async {
-    var response = await http.post(url, headers: _getHeaders(), body: body);
+    var response = await http.post(url, headers: _getHeaders(), body: body).timeout(
+      const Duration(seconds: 15),
+      onTimeout: () => throw Exception("Serverga ulanish vaqti tugadi. Qaytadan urinib ko'ring."),
+    );
     if (response.statusCode == 401) {
       final refreshed = await AuthService().refreshToken();
       if (refreshed) {
-        response = await http.post(url, headers: _getHeaders(), body: body);
+        response = await http.post(url, headers: _getHeaders(), body: body).timeout(
+          const Duration(seconds: 15),
+          onTimeout: () => throw Exception("Serverga ulanish vaqti tugadi. Qaytadan urinib ko'ring."),
+        );
       } else {
         await AuthService().logout();
         throw Exception("Sessiya muddati tugagan. Qaytadan kiring.");

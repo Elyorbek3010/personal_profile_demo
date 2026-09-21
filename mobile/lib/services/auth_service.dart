@@ -67,6 +67,9 @@ class AuthService extends ChangeNotifier {
           'username': email.trim(),
           'password': password,
         }),
+      ).timeout(
+        const Duration(seconds: 15),
+        onTimeout: () => throw Exception("Serverga ulanish vaqti tugadi (Timeout). Qaytadan urinib ko'ring."),
       );
 
       final data = jsonDecode(utf8.decode(response.bodyBytes));
@@ -94,8 +97,14 @@ class AuthService extends ChangeNotifier {
       } else {
         _isLoading = false;
         notifyListeners();
-        final detail = data['detail'] ?? data['error'] ?? 'Kirishda xatolik yuz berdi';
-        throw Exception(detail);
+        final rawDetail = data['detail'] ?? data['error'];
+        String detailMsg = 'Kirishda xatolik yuz berdi';
+        if (rawDetail is List && rawDetail.isNotEmpty) {
+          detailMsg = rawDetail.first.toString();
+        } else if (rawDetail is String && rawDetail.isNotEmpty) {
+          detailMsg = rawDetail;
+        }
+        throw Exception(detailMsg);
       }
     } catch (e) {
       _isLoading = false;

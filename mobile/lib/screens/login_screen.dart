@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import '../services/locale_service.dart';
 import '../widgets/app_top_bar.dart';
+import 'main_shell.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,6 +17,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController(text: kDebugMode ? 'jdu12345' : '');
   bool _obscurePassword = true;
   String? _errorMessage;
+  bool _isSubmitting = false;
 
   final List<Map<String, String>> _quickStudents = [
     {
@@ -51,11 +53,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
     setState(() {
       _errorMessage = null;
+      _isSubmitting = true;
     });
 
     if (email.isEmpty || password.isEmpty) {
       setState(() {
         _errorMessage = t('email_empty');
+        _isSubmitting = false;
       });
       return;
     }
@@ -63,17 +67,29 @@ class _LoginScreenState extends State<LoginScreen> {
     if (!email.toLowerCase().endsWith('@jdu.uz')) {
       setState(() {
         _errorMessage = t('domain_error');
+        _isSubmitting = false;
       });
       return;
     }
 
     try {
       await AuthService().login(email, password);
-      // Navigation is handled reactively by main.dart ListenableBuilder
+      if (mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const MainShell()),
+          (route) => false,
+        );
+      }
     } catch (e) {
       if (mounted) {
         setState(() {
           _errorMessage = e.toString().replaceAll('Exception: ', '');
+        });
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSubmitting = false;
         });
       }
     }
@@ -95,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final t = LocaleService().t;
-    final isLoading = AuthService().isLoading;
+    final isLoading = _isSubmitting || AuthService().isLoading;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
