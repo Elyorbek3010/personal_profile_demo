@@ -20,6 +20,7 @@ class HealthCheckView(APIView):
         }, status=status.HTTP_200_OK)
 
 urlpatterns = [
+    path('', HealthCheckView.as_view(), name='root_health'),
     path('admin/', admin.site.urls),
     path('api/health/', HealthCheckView.as_view(), name='health_check'),
     path('api/auth/', include('apps.accounts.urls')),
