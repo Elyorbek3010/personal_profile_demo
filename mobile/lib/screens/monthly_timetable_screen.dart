@@ -52,9 +52,15 @@ class _MonthlyTimetableScreenState extends State<MonthlyTimetableScreen> {
     }
     // weekday is 1-7 (Mon-Sun). Our API dayIndex is 0-5 (Mon-Sat).
     final dayIndex = date.weekday - 1;
+    final dateString = "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
     try {
       final daySchedule = widget.weeklySchedule.firstWhere((d) => d.dayIndex == dayIndex);
-      return daySchedule.classes;
+      return daySchedule.classes.where((c) {
+        if (c.specificDate != null && c.specificDate!.isNotEmpty) {
+          return c.specificDate == dateString;
+        }
+        return true;
+      }).toList();
     } catch (_) {
       return [];
     }

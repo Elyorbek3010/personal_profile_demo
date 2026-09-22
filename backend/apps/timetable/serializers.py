@@ -11,6 +11,7 @@ class TimetableEntrySerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'semester',
+            'specific_date',
             'day_index',
             'day_name',
             'period',

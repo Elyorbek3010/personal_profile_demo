@@ -340,7 +340,8 @@ class _TimetableScreenState extends State<TimetableScreen> {
 
   Widget _buildClassesList(String Function(String) t) {
     final dayData = _currentDaySchedule;
-    final classes = dayData?.classes ?? [];
+    final allClasses = dayData?.classes ?? [];
+    final classes = allClasses.where((c) => c.specificDate == null || c.specificDate!.isEmpty).toList();
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     if (classes.isEmpty) {

@@ -17,6 +17,7 @@ class TimetableClassModel {
   final bool isJapanese;
   final String classType;
   final String notes;
+  final String? specificDate;
 
   TimetableClassModel({
     required this.id,
@@ -37,6 +38,7 @@ class TimetableClassModel {
     required this.isJapanese,
     required this.classType,
     required this.notes,
+    this.specificDate,
   });
 
   factory TimetableClassModel.fromJson(Map<String, dynamic> json) {
@@ -65,6 +67,7 @@ class TimetableClassModel {
       isJapanese: json['is_japanese'] == true,
       classType: json['class_type']?.toString() ?? 'lecture',
       notes: json['notes']?.toString() ?? '',
+      specificDate: json['specific_date']?.toString(),
     );
   }
 }

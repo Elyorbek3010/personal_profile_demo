@@ -32,15 +32,31 @@ class TimetableEntry(models.Model):
         default="Dushanba",
         help_text="Hafta kuni nomi o'zbek tilida (Dushanba, Seshanba...)"
     )
+    PERIOD_CHOICES = (
+        (1, '1-para (09:00 - 10:15)'),
+        (2, '2-para (10:25 - 11:40)'),
+        (3, '3-para (11:50 - 13:05)'),
+        (4, '4-para (13:50 - 15:05)'),
+        (5, '5-para (15:15 - 16:30)'),
+        (6, '6-para (16:40 - 17:55)'),
+    )
+
+    specific_date = models.DateField(
+        blank=True, null=True,
+        help_text="Aniq sana (agar faqat bir kunga tegishli bo'lsa, qaysi kunligi avtomatik olinadi)"
+    )
     period = models.IntegerField(
+        choices=PERIOD_CHOICES,
         default=1,
-        help_text="Para raqami (1-para, 2-para... 1 dan 6 gacha)"
+        help_text="Para raqami (1 dan 6 gacha)"
     )
     start_time = models.TimeField(
-        help_text="Dars boshlanish vaqti (masalan: 09:00)"
+        blank=True, null=True,
+        help_text="Dars boshlanish vaqti (avtomatik qo'yiladi)"
     )
     end_time = models.TimeField(
-        help_text="Dars tugash vaqti (masalan: 10:15)"
+        blank=True, null=True,
+        help_text="Dars tugash vaqti (avtomatik qo'yiladi)"
     )
     subject = models.CharField(
         max_length=200,
@@ -95,6 +111,42 @@ class TimetableEntry(models.Model):
         verbose_name = "Timetable Entry"
         verbose_name_plural = "Timetable Entries"
         ordering = ['day_index', 'period', 'room']
+
+    def save(self, *args, **kwargs):
+        # Agar aniq sana kiritilgan bo'lsa, hafta kunini shundan olamiz
+        if self.specific_date:
+            self.day_index = self.specific_date.weekday()
+
+        # Hafta kuni nomini avtomatik to'g'irlash
+        day_map = dict(self.DAY_CHOICES)
+        if self.day_index in day_map:
+            self.day_name = day_map[self.day_index].split(' ')[0]
+
+        # Para vaqtlarini avtomatik to'g'irlash
+        PERIOD_TIMES = {
+            1: ('09:00', '10:15'),
+            2: ('10:25', '11:40'),
+            3: ('11:50', '13:05'),
+            4: ('13:50', '15:05'),
+            5: ('15:15', '16:30'),
+            6: ('16:40', '17:55'),
+        }
+        if self.period in PERIOD_TIMES:
+            import datetime
+            start_str, end_str = PERIOD_TIMES[self.period]
+            self.start_time = datetime.datetime.strptime(start_str, '%H:%M').time()
+            self.end_time = datetime.datetime.strptime(end_str, '%H:%M').time()
+
+        # Guruhlar formatini to'g'irlash (masalan oddiy string yozilgan bo'lsa listga o'tkazish)
+        if isinstance(self.groups, str):
+            import json
+            try:
+                self.groups = json.loads(self.groups)
+            except json.JSONDecodeError:
+                # Agar JSON xato bo'lsa vergul bilan ajratilgan string deb qabul qilamiz
+                self.groups = [g.strip() for g in self.groups.split(',')]
+                
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"[{self.get_day_index_display()}] {self.period}-para ({self.start_time.strftime('%H:%M')}-{self.end_time.strftime('%H:%M')}) - {self.subject} ({self.room})"

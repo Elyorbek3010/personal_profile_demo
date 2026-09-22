@@ -938,12 +938,14 @@ class _AcademicsScreenState extends State<AcademicsScreen> with SingleTickerProv
                 statusColor = const Color(0xFFEF4444);
             }
 
-            return Container(
+            return Card(
               margin: const EdgeInsets.fromLTRB(16, 6, 16, 2),
-              decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF1E293B) : Colors.white,
+              color: isDark ? const Color(0xFF1E293B) : Colors.white,
+              elevation: 0,
+              clipBehavior: Clip.antiAlias,
+              shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(
+                side: BorderSide(
                   color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
                 ),
               ),

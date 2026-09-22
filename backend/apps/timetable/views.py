@@ -1,5 +1,6 @@
 import datetime
 from django.utils import timezone
+from django.db.models import Q
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, status
@@ -71,8 +72,13 @@ class TodayScheduleView(APIView):
     def get(self, request):
         user = request.user
         today_weekday = datetime.datetime.now().weekday() # 0 = Monday, 6 = Sunday
+        today_date = datetime.date.today()
 
-        queryset = get_student_schedule(user).filter(day_index=today_weekday)
+        queryset = get_student_schedule(user).filter(
+            day_index=today_weekday
+        ).filter(
+            Q(specific_date__isnull=True) | Q(specific_date=today_date)
+        )
         classes_data = TimetableEntrySerializer(queryset, many=True).data
 
         return Response({
@@ -97,16 +103,24 @@ class NextClassView(APIView):
         schedule = get_student_schedule(user)
 
         # 1. Check for remaining classes today
+        today_date = datetime.date.today()
         next_class = schedule.filter(
             day_index=current_weekday,
             start_time__gte=current_time
+        ).filter(
+            Q(specific_date__isnull=True) | Q(specific_date=today_date)
         ).order_by('start_time').first()
 
         # 2. If no more classes today, find the first class of the next school day
         if not next_class:
             for offset in range(1, 7):
-                next_day_index = (current_weekday + offset) % 7
-                next_class = schedule.filter(day_index=next_day_index).order_by('period').first()
+                next_date = today_date + datetime.timedelta(days=offset)
+                next_day_index = next_date.weekday()
+                next_class = schedule.filter(
+                    day_index=next_day_index
+                ).filter(
+                    Q(specific_date__isnull=True) | Q(specific_date=next_date)
+                ).order_by('period').first()
                 if next_class:
                     break
 
