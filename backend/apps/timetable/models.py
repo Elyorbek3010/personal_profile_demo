@@ -23,7 +23,8 @@ class TimetableEntry(models.Model):
     )
     day_index = models.IntegerField(
         choices=DAY_CHOICES,
-        default=0,
+        blank=True,
+        null=True,
         db_index=True,
         help_text="Hafta kuni indeksi (0=Dushanba, 1=Seshanba...)"
     )
@@ -112,6 +113,12 @@ class TimetableEntry(models.Model):
         verbose_name_plural = "Timetable Entries"
         ordering = ['day_index', 'period', 'room']
 
+    def clean(self):
+        super().clean()
+        from django.core.exceptions import ValidationError
+        if self.specific_date is None and self.day_index is None:
+            raise ValidationError("Agar aniq sana kiritilmagan bo'lsa, hafta kuni indeksini belgilash shart.")
+
     def save(self, *args, **kwargs):
         # Agar aniq sana kiritilgan bo'lsa, hafta kunini shundan olamiz
         if self.specific_date:
@@ -149,4 +156,5 @@ class TimetableEntry(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"[{self.get_day_index_display()}] {self.period}-para ({self.start_time.strftime('%H:%M')}-{self.end_time.strftime('%H:%M')}) - {self.subject} ({self.room})"
+        day_str = self.get_day_index_display() if self.day_index is not None else ""
+        return f"[{day_str}] {self.period}-para ({self.start_time.strftime('%H:%M') if self.start_time else ''}-{self.end_time.strftime('%H:%M') if self.end_time else ''}) - {self.subject} ({self.room})"
