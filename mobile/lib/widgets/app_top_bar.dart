@@ -4,10 +4,12 @@ import '../services/theme_service.dart';
 
 class ThemeAndLanguageBar extends StatelessWidget {
   final bool showBackground;
+  final bool showLanguageSelector;
 
   const ThemeAndLanguageBar({
     super.key,
     this.showBackground = true,
+    this.showLanguageSelector = true,
   });
 
   static const List<Map<String, String>> languages = [
@@ -86,35 +88,37 @@ class ThemeAndLanguageBar extends StatelessWidget {
         return Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Language Selector Chip
-            InkWell(
-              onTap: () => _showLanguagePicker(context),
-              borderRadius: BorderRadius.circular(10),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                decoration: BoxDecoration(
-                  color: isDark ? Colors.white.withValues(alpha: 0.06) : Colors.black.withValues(alpha: 0.04),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: isDark ? Colors.white.withValues(alpha: 0.1) : Colors.black.withValues(alpha: 0.08),
+            if (showLanguageSelector) ...[
+              // Language Selector Chip
+              InkWell(
+                onTap: () => _showLanguagePicker(context),
+                borderRadius: BorderRadius.circular(10),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: isDark ? Colors.white.withValues(alpha: 0.06) : Colors.black.withValues(alpha: 0.04),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: isDark ? Colors.white.withValues(alpha: 0.1) : Colors.black.withValues(alpha: 0.08),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(currentLang['flag']!, style: const TextStyle(fontSize: 14)),
+                      const SizedBox(width: 6),
+                      Text(
+                        currentLang['code']!.toUpperCase(),
+                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(width: 2),
+                      const Icon(Icons.keyboard_arrow_down, size: 16),
+                    ],
                   ),
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(currentLang['flag']!, style: const TextStyle(fontSize: 14)),
-                    const SizedBox(width: 6),
-                    Text(
-                      currentLang['code']!.toUpperCase(),
-                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(width: 2),
-                    const Icon(Icons.keyboard_arrow_down, size: 16),
-                  ],
-                ),
               ),
-            ),
-            const SizedBox(width: 8),
+              const SizedBox(width: 8),
+            ],
 
             // Light / Dark Mode Toggle
             InkWell(

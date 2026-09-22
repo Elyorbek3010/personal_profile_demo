@@ -10,6 +10,7 @@ import '../widgets/class_item_card.dart';
 import '../widgets/day_selector_bar.dart';
 import '../widgets/next_class_card.dart';
 import 'profile_screen.dart';
+import 'monthly_timetable_screen.dart';
 
 class TimetableScreen extends StatefulWidget {
   final VoidCallback? onMenuPressed;
@@ -171,7 +172,7 @@ class _TimetableScreenState extends State<TimetableScreen> {
               ),
             ),
             actions: const [
-              ThemeAndLanguageBar(),
+              ThemeAndLanguageBar(showLanguageSelector: false),
               SizedBox(width: 12),
             ],
           ),
@@ -195,38 +196,109 @@ class _TimetableScreenState extends State<TimetableScreen> {
                             child: NextClassCard(response: _nextClass),
                           ),
 
-                          // Academic Context Strip
+                          // Academic Context Strip (Monthly Schedule Button)
                           SliverToBoxAdapter(
                             child: Container(
                               margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                               decoration: BoxDecoration(
-                                color: isDark ? const Color(0xFF131D31) : Colors.white,
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: isDark ? const Color(0xFF1E2D4A) : const Color(0xFFE2E8F0),
+                                gradient: LinearGradient(
+                                  colors: isDark 
+                                      ? [const Color(0xFF1E293B), const Color(0xFF0F172A)] 
+                                      : [const Color(0xFFEFF6FF), const Color(0xFFDBEAFE)],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
                                 ),
-                              ),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.auto_stories_outlined,
-                                    size: 15,
-                                    color: isDark ? const Color(0xFF38BDF8) : const Color(0xFF2563EB),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: Text(
-                                      "${t('group')}: ${user?.group} • ${user?.partnerUniversity} • ${user?.japaneseExempt == true ? t('japanese_exempt') : t('japanese_required')}",
-                                      style: TextStyle(
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.w500,
-                                        color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: isDark ? const Color(0xFF334155) : const Color(0xFFBFDBFE),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: isDark ? Colors.black.withOpacity(0.3) : const Color(0xFF2563EB).withOpacity(0.08),
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 4),
                                   ),
                                 ],
+                              ),
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(16),
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => MonthlyTimetableScreen(
+                                          weeklySchedule: _schedule,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16),
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                            color: isDark ? const Color(0xFF3B82F6).withOpacity(0.2) : Colors.white,
+                                            borderRadius: BorderRadius.circular(12),
+                                            boxShadow: [
+                                              if (!isDark)
+                                                BoxShadow(
+                                                  color: const Color(0xFF2563EB).withOpacity(0.1),
+                                                  blurRadius: 8,
+                                                  offset: const Offset(0, 2),
+                                                ),
+                                            ],
+                                          ),
+                                          child: Icon(
+                                            Icons.calendar_month_rounded,
+                                            size: 24,
+                                            color: isDark ? const Color(0xFF60A5FA) : const Color(0xFF2563EB),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 16),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                t('monthly_timetable'),
+                                                style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w700,
+                                                  color: isDark ? Colors.white : const Color(0xFF1E3A8A),
+                                                ),
+                                              ),
+                                              const SizedBox(height: 4),
+                                              Text(
+                                                t('view_monthly_schedule'),
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Container(
+                                          padding: const EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            color: isDark ? const Color(0xFF1E293B) : const Color(0xFFEFF6FF),
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: Icon(
+                                            Icons.arrow_forward_ios_rounded,
+                                            size: 14,
+                                            color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF3B82F6),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                           ),

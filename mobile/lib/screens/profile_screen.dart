@@ -510,11 +510,11 @@ class ProfileScreen extends StatelessWidget {
             const SizedBox(height: 16),
 
             // Settings Card (Theme & Language)
-            Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).cardTheme.color,
+            Material(
+              color: Theme.of(context).cardTheme.color,
+              shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(
+                side: BorderSide(
                   color: Theme.of(context).colorScheme.outline,
                 ),
               ),

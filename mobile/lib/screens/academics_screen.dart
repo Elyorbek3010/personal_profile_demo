@@ -349,9 +349,9 @@ class _AcademicsScreenState extends State<AcademicsScreen> with SingleTickerProv
           ),
 
           // AI Warning Banners
-          if (report.attendance.warnings.isNotEmpty)
+          if (_getLocalizedWarnings(report.attendance, t).isNotEmpty)
             SliverToBoxAdapter(
-              child: _buildWarningBanners(report.attendance.warnings, isDark),
+              child: _buildWarningBanners(_getLocalizedWarnings(report.attendance, t), isDark),
             ),
 
           // Tab Bar
@@ -391,6 +391,33 @@ class _AcademicsScreenState extends State<AcademicsScreen> with SingleTickerProv
         ],
       ),
     );
+  }
+
+  // ── Localized Warnings ──
+  List<String> _getLocalizedWarnings(AttendanceData attendance, String Function(String) t) {
+    List<String> warnings = [];
+
+    // Overall warning
+    if (attendance.overallPercentage < 80 && attendance.overallPercentage > 0) {
+      warnings.add('🚨 ' + t('overall_danger').replaceAll('{pct}', attendance.overallPercentage.toString()));
+    } else if (attendance.overallPercentage < 85 && attendance.overallPercentage > 0) {
+      warnings.add('⚠️ ' + t('overall_warning').replaceAll('{pct}', attendance.overallPercentage.toString()));
+    }
+
+    // Subject warnings
+    for (var s in attendance.subjects) {
+      final subjName = t(s.name);
+      if (s.status == 'danger') {
+        warnings.add('🚨 ' + t('risk_danger').replaceAll('{subj}', subjName).replaceAll('{pct}', s.percentage.toString()));
+      } else if (s.status == 'warning') {
+        if (s.classesCanMiss <= 1) {
+          warnings.add('⚠️ ' + t('risk_warning_1').replaceAll('{subj}', subjName));
+        } else {
+          warnings.add('⚠️ ' + t('risk_warning_n').replaceAll('{subj}', subjName).replaceAll('{n}', s.classesCanMiss.toString()));
+        }
+      }
+    }
+    return warnings;
   }
 
   // ── GPA Hero Card ──
@@ -661,7 +688,7 @@ class _AcademicsScreenState extends State<AcademicsScreen> with SingleTickerProv
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
-                            s.name,
+                            t(s.name),
                             style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -749,7 +776,7 @@ class _AcademicsScreenState extends State<AcademicsScreen> with SingleTickerProv
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          s.name,
+                          t(s.name),
                           style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -795,14 +822,43 @@ class _AcademicsScreenState extends State<AcademicsScreen> with SingleTickerProv
                   ),
                   if (s.riskMessage != null) ...[
                     const SizedBox(height: 8),
-                    Text(
-                      s.riskMessage!.replaceAll(RegExp(r'[🚨⚠️ℹ️]\s*'), ''),
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        color: statusColor,
-                        fontStyle: FontStyle.italic,
-                      ),
+                    Builder(
+                      builder: (context) {
+                        String getLocalizedMessage() {
+                          final subjName = t(s.name);
+                          if (s.status == 'danger') {
+                            return t('risk_danger')
+                                .replaceAll('{subj}', subjName)
+                                .replaceAll('{pct}', s.percentage.toString());
+                          } else if (s.status == 'warning') {
+                            if (s.classesCanMiss <= 1) {
+                              return t('risk_warning_1')
+                                  .replaceAll('{subj}', subjName);
+                            } else {
+                              return t('risk_warning_n')
+                                  .replaceAll('{subj}', subjName)
+                                  .replaceAll('{n}', s.classesCanMiss.toString());
+                            }
+                          } else {
+                            if (s.classesCanMiss <= 2) {
+                              return t('risk_safe')
+                                  .replaceAll('{subj}', subjName)
+                                  .replaceAll('{n}', s.classesCanMiss.toString());
+                            }
+                          }
+                          return s.riskMessage!.replaceAll(RegExp(r'[🚨⚠️ℹ️]\s*'), ''); // Fallback
+                        }
+
+                        return Text(
+                          getLocalizedMessage(),
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            color: statusColor,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ],
