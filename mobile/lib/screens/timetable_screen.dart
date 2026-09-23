@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../models/timetable_model.dart';
 import '../services/api_service.dart';
 import '../services/auth_service.dart';
+import '../services/fcm_service.dart';
 import '../services/locale_service.dart';
 import '../services/theme_service.dart';
 import '../widgets/avatar_helper.dart';
@@ -23,6 +25,7 @@ class TimetableScreen extends StatefulWidget {
 
 class _TimetableScreenState extends State<TimetableScreen> {
   final ApiService _api = ApiService();
+  StreamSubscription? _fcmSubscription;
   List<DayScheduleModel> _schedule = [];
   NextClassResponse? _nextClass;
   bool _isLoading = true;
@@ -36,6 +39,18 @@ class _TimetableScreenState extends State<TimetableScreen> {
     final today = DateTime.now().weekday - 1;
     _selectedDayIndex = (today >= 0 && today <= 5) ? today : 0;
     _loadData();
+    
+    _fcmSubscription = FCMService().onScheduleUpdate.listen((_) {
+      if (mounted) {
+        _loadData();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _fcmSubscription?.cancel();
+    super.dispose();
   }
 
   Future<void> _loadData() async {
@@ -341,7 +356,19 @@ class _TimetableScreenState extends State<TimetableScreen> {
   Widget _buildClassesList(String Function(String) t) {
     final dayData = _currentDaySchedule;
     final allClasses = dayData?.classes ?? [];
-    final classes = allClasses.where((c) => c.specificDate == null || c.specificDate!.isEmpty).toList();
+    
+    final now = DateTime.now();
+    final currentDayIndex = now.weekday - 1;
+    final targetDate = now.add(Duration(days: _selectedDayIndex - currentDayIndex));
+    final dateString = "${targetDate.year}-${targetDate.month.toString().padLeft(2, '0')}-${targetDate.day.toString().padLeft(2, '0')}";
+
+    final classes = allClasses.where((c) {
+      if (c.specificDate != null && c.specificDate!.isNotEmpty) {
+        return c.specificDate == dateString;
+      }
+      return true;
+    }).toList();
+    
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     if (classes.isEmpty) {

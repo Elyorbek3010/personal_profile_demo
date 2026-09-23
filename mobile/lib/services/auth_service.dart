@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../config/constants.dart';
 import '../models/user_model.dart';
-
+import 'fcm_service.dart';
 class AuthService extends ChangeNotifier {
   static final AuthService _instance = AuthService._internal();
   factory AuthService() => _instance;
@@ -52,6 +52,9 @@ class AuthService extends ChangeNotifier {
       }
     }
     notifyListeners();
+    if (_accessToken != null) {
+      _syncFCMToken();
+    }
   }
 
   Future<bool> login(String email, String password) async {
@@ -93,6 +96,7 @@ class AuthService extends ChangeNotifier {
 
         _isLoading = false;
         notifyListeners();
+        _syncFCMToken();
         return true;
       } else {
         _isLoading = false;
@@ -188,5 +192,26 @@ class AuthService extends ChangeNotifier {
     await prefs.remove(AppConstants.keyRefreshToken);
     await prefs.remove(AppConstants.keyUserData);
     notifyListeners();
+  }
+
+  Future<void> _syncFCMToken() async {
+    if (_accessToken == null) return;
+    try {
+      final token = await FCMService().getToken();
+      if (token != null) {
+        final url = Uri.parse('${AppConstants.baseUrl}/api/auth/update-fcm-token/');
+        await http.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $_accessToken',
+          },
+          body: jsonEncode({'fcm_token': token}),
+        );
+        debugPrint('FCM Token synced to backend.');
+      }
+    } catch (e) {
+      debugPrint('Failed to sync FCM token: $e');
+    }
   }
 }

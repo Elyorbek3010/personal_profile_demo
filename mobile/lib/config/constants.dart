@@ -5,7 +5,8 @@ class AppConstants {
 
   // Base API URL
   static String get baseUrl {
-    return 'https://uviver-superapp-backend.onrender.com';
+    // return 'https://uviver-superapp-backend.onrender.com';
+    return 'http://127.0.0.1:8000';
   }
 
   // Storage Keys

@@ -26,7 +26,18 @@ class DaySelectorBar extends StatelessWidget {
         classes: [],
       ),
     );
-    return day.classes.length;
+    
+    final now = DateTime.now();
+    final currentDayIndex = now.weekday - 1;
+    final targetDate = now.add(Duration(days: dayIndex - currentDayIndex));
+    final dateString = "${targetDate.year}-${targetDate.month.toString().padLeft(2, '0')}-${targetDate.day.toString().padLeft(2, '0')}";
+
+    return day.classes.where((c) {
+      if (c.specificDate != null && c.specificDate!.isNotEmpty) {
+        return c.specificDate == dateString;
+      }
+      return true;
+    }).length;
   }
 
   @override

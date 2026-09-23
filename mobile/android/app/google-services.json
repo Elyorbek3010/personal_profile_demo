@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "922896508124",
+    "project_id": "universuperapp",
+    "storage_bucket": "universuperapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:922896508124:android:58ca36ab8aeb3f5d0bc019",
+        "android_client_info": {
+          "package_name": "uz.jdu.univer_superapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZJlJscli2rZmUOH79Zs50K4bDvW70tJM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

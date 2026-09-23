@@ -31,6 +31,7 @@ class StudentProfile(models.Model):
     phone = models.CharField(max_length=30, blank=True, null=True, help_text="Telefon raqami")
     bio = models.TextField(blank=True, null=True, help_text="Qisqacha talaba ma'lumoti")
     is_verified = models.BooleanField(default=False, help_text="Universitet rasmiy ro'yxatida tasdiqlangan")
+    fcm_token = models.CharField(max_length=255, blank=True, null=True, help_text="Firebase Cloud Messaging token for push notifications")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

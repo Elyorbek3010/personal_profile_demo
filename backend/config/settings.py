@@ -204,3 +204,4 @@ LOGGING = {
     },
 }
 
+FIREBASE_CREDENTIALS_PATH = os.path.join(BASE_DIR, 'firebase-adminsdk.json')

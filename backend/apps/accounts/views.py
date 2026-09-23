@@ -203,3 +203,21 @@ class UpdateAvatarView(APIView):
             'message': 'Profil rasmi yangilandi!'
         }, status=status.HTTP_200_OK)
 
+class UpdateFCMTokenView(APIView):
+    """
+    POST /api/auth/update-fcm-token/
+    Body: { "fcm_token": "..." }
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        token = request.data.get('fcm_token', '').strip()
+        user = request.user
+        profile, _ = StudentProfile.objects.get_or_create(user=user)
+        
+        if token and profile.fcm_token != token:
+            profile.fcm_token = token
+            profile.save(update_fields=['fcm_token'])
+            
+        return Response({'success': True, 'message': 'FCM token updated'}, status=status.HTTP_200_OK)
+
